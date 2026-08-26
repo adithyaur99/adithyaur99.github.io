@@ -21,8 +21,6 @@
   <body>
     <a class="skip-link" href="#system">Skip to content</a>
     <div class="noise" aria-hidden="true"></div>
-    <canvas id="world" aria-hidden="true"></canvas>
-
     <header class="site-header">
       <a class="mark" href="#top" aria-label="Adithya U R, home"><span>A</span><i></i><span>UR</span></a>
       <div class="header-status"><span class="status-dot"></span> Stockholm, Sweden</div>
@@ -30,25 +28,57 @@
     </header>
 
     <main id="top">
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-copy">
-          <p class="eyebrow"><span>01</span> ML systems engineer</p>
-          <h1 id="hero-title">I make machine learning work <em>outside the notebook.</em></h1>
-          <p class="hero-intro">I design the path from raw data to reliable compute—then make every run reproducible, governed, and explainable.</p>
+      <section class="game-hero" aria-labelledby="hero-title">
+        <canvas id="world" tabindex="0" aria-label="Playable ML systems world. Drive with WASD or arrow keys and collect four system checkpoints."></canvas>
+
+        <div class="game-menu" id="game-menu">
+          <p class="eyebrow"><span>01</span> Adithya U R · ML systems engineer</p>
+          <h1 id="hero-title">Don’t read the résumé.<br><em>Drive through it.</em></h1>
+          <p class="hero-intro">Bring an ML system online by connecting its four missing layers. The portfolio unlocks as you explore.</p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#system">Enter the system <span>↓</span></a>
-            <a class="button button-quiet" href="https://www.linkedin.com/in/adithya-u-r-79586612b/" target="_blank" rel="noreferrer">LinkedIn <span>↗</span></a>
+            <button class="button button-primary" id="start-game" type="button">Start the system <span>→</span></button>
+            <a class="button button-quiet" href="#system">Skip to portfolio <span>↓</span></a>
+          </div>
+          <p class="start-controls"><span>WASD / ARROWS</span> to drive · <span>F</span> fullscreen</p>
+        </div>
+
+        <div class="game-hud" id="game-hud" hidden>
+          <div class="hud-objective"><span>MISSION</span><strong>Connect the ML system</strong></div>
+          <ol class="checkpoint-list">
+            <li data-checkpoint="data"><i></i>Data</li>
+            <li data-checkpoint="compute"><i></i>Compute</li>
+            <li data-checkpoint="identity"><i></i>Identity</li>
+            <li data-checkpoint="evidence"><i></i>Evidence</li>
+          </ol>
+          <div class="hud-counter"><strong id="checkpoint-count">0 / 4</strong><span>ONLINE</span></div>
+        </div>
+
+        <div class="checkpoint-callout" id="checkpoint-callout" hidden aria-live="polite">
+          <span id="callout-index">01</span>
+          <div><strong id="callout-title">DATA CONNECTED</strong><p id="callout-copy">Portable inputs. Verifiable bytes.</p></div>
+        </div>
+
+        <div class="game-complete" id="game-complete" hidden>
+          <p class="eyebrow"><span>✓</span> System online</p>
+          <h2>Now inspect<br><em>the engineering.</em></h2>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#work">Explore the work <span>↓</span></a>
+            <button class="button button-quiet" id="restart-game" type="button">Drive again <span>↻</span></button>
           </div>
         </div>
 
-        <div class="orbit-label orbit-label-a" aria-hidden="true"><span>01</span> DATA</div>
-        <div class="orbit-label orbit-label-b" aria-hidden="true"><span>02</span> COMPUTE</div>
-        <div class="orbit-label orbit-label-c" aria-hidden="true"><span>03</span> EVIDENCE</div>
+        <div class="touch-controls" id="touch-controls" role="group" hidden aria-label="Driving controls">
+          <button type="button" data-control="left" aria-label="Turn left">←</button>
+          <div><button type="button" data-control="up" aria-label="Drive forward">↑</button><button type="button" data-control="down" aria-label="Reverse">↓</button></div>
+          <button type="button" data-control="right" aria-label="Turn right">→</button>
+        </div>
 
+        <button class="fullscreen-button" id="fullscreen-button" type="button" aria-label="Toggle fullscreen">F · FULLSCREEN</button>
+        <div class="game-status" id="game-status" aria-live="polite">System waiting for pilot</div>
         <div class="hero-foot">
-          <span>Scroll to inspect</span>
+          <span>Interactive portfolio / 2026</span>
           <div class="scroll-line"><i></i></div>
-          <span class="hero-foot-right">Data · GPU · Runtime · Identity</span>
+          <span class="hero-foot-right">Drive · Discover · Inspect</span>
         </div>
       </section>
 
