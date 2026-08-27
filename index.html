@@ -3,14 +3,17 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#07100d">
+    <meta name="theme-color" content="#f2b35f">
     <meta name="description" content="Drive through Adithya U R's interactive 3D portfolio of ML systems, data platforms, GPU infrastructure, and engineering experience.">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Adithya U R — A portfolio you can drive">
     <meta property="og:description" content="Explore ML systems, projects, and experience as one playable 3D world.">
     <meta property="og:url" content="https://adithyaur99.github.io/">
-    <meta property="og:image" content="https://adithyaur99.github.io/assets/img/og.png">
+    <meta property="og:image" content="https://adithyaur99.github.io/assets/img/og-systems-island.png">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Adithya U R — Drive through the stack">
+    <meta name="twitter:description" content="Explore ML systems, projects, and experience as one playable 3D world.">
+    <meta name="twitter:image" content="https://adithyaur99.github.io/assets/img/og-systems-island.png">
     <title>Adithya U R — A Portfolio You Can Drive</title>
     <link rel="icon" href="assets/img/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,7 +30,7 @@
 
       <header class="site-header">
         <a class="mark" href="#top" aria-label="Adithya U R, home"><span>A</span><i></i><span>UR</span></a>
-        <div class="header-status"><span class="status-dot"></span> Portfolio world / Stockholm</div>
+        <div class="header-status"><span class="status-dot"></span> Systems Island / Stockholm</div>
         <nav class="header-links" aria-label="External links">
           <a href="https://github.com/adithyaur99" target="_blank" rel="noreferrer">GitHub ↗</a>
           <a href="https://www.linkedin.com/in/adithya-u-r-79586612b/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
@@ -35,18 +38,19 @@
       </header>
 
       <section class="start-screen" id="start-screen" aria-labelledby="hero-title">
-        <p class="eyebrow"><span>01</span> Adithya U R · ML systems engineer</p>
-        <h1 id="hero-title">A portfolio<br>you can <em>drive.</em></h1>
-        <p>Explore my résumé and open-source work as one connected 3D world. Every building is real experience. Every portal is a project.</p>
+        <p class="eyebrow"><span>NEW WORLD</span> Adithya U R · ML systems engineer</p>
+        <h1 id="hero-title">Drive through<br>the <em>stack.</em></h1>
+        <p>This is my résumé rebuilt as a small open world. Follow the roads, launch off ramps, find every project, and press Enter when something catches your eye.</p>
         <div class="start-actions">
-          <button class="button button-primary" id="start-game" type="button">Enter the world <span>→</span></button>
+          <button class="button button-primary" id="start-game" type="button">Start the engine <span>→</span></button>
           <button class="button button-quiet" id="open-intro" type="button">Read the quick intro <span>↗</span></button>
         </div>
         <div class="start-controls">
           <span><kbd>WASD</kbd> Drive</span>
+          <span><kbd>SHIFT</kbd> Boost</span>
+          <span><kbd>SPACE</kbd> Jump</span>
           <span><kbd>ENTER</kbd> Inspect</span>
           <span><kbd>M</kbd> World map</span>
-          <span><kbd>F</kbd> Fullscreen</span>
         </div>
       </section>
 
@@ -59,7 +63,7 @@
           <span class="nav-arrow" id="nav-arrow">↑</span>
           <div><small>NEXT LANDMARK</small><strong id="target-title">About Adithya</strong><em id="target-distance">0 m</em></div>
         </div>
-        <div class="hud-progress"><strong id="visited-count">0 / 15</strong><span>DISCOVERED</span></div>
+        <div class="hud-progress"><strong id="visited-count">0 / 15</strong><span>DISCOVERED</span><small id="speed-readout">0 KM/H</small></div>
       </section>
 
       <div class="interaction-prompt" id="interaction-prompt" hidden aria-live="polite">
@@ -86,14 +90,14 @@
 
       <aside class="map-panel" id="map-panel" role="dialog" aria-modal="true" tabindex="-1" hidden aria-labelledby="map-title">
         <div class="panel-topline"><span>WORLD MAP</span><span>M OR ESC TO CLOSE</span></div>
-        <div class="map-heading"><h2 id="map-title">Choose your<br><em>next landmark.</em></h2><p>Set a destination, close the map, and follow the arrow. Nothing teleports you—the drive is the point.</p></div>
+        <div class="map-heading"><h2 id="map-title">Pick a stop.<br><em>Drive there.</em></h2><p>Every pin is real experience or a runnable open-source project. Set a route and follow the arrow—no teleporting.</p></div>
         <div class="map-grid" id="map-grid"></div>
         <button class="panel-close" id="close-map" type="button" aria-label="Close world map">×</button>
       </aside>
 
       <div class="game-toolbar" id="game-toolbar" hidden>
         <button id="map-button" type="button">M · MAP</button>
-        <button id="restart-button" type="button">R · RESET</button>
+        <button id="restart-button" type="button">R · RESPAWN</button>
         <button id="fullscreen-button" type="button">F · FULLSCREEN</button>
       </div>
 
@@ -101,6 +105,8 @@
         <button type="button" data-control="left" aria-label="Turn left">←</button>
         <div><button type="button" data-control="up" aria-label="Drive forward">↑</button><button type="button" data-control="down" aria-label="Reverse">↓</button></div>
         <button type="button" data-control="right" aria-label="Turn right">→</button>
+        <button class="touch-boost" type="button" data-control="boost" aria-label="Boost">BOOST</button>
+        <button class="touch-jump" type="button" data-action="jump" aria-label="Jump">HOP</button>
       </div>
       <button class="touch-inspect" id="touch-inspect" type="button" hidden>Read</button>
 
