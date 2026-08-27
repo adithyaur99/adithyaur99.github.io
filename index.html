@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#07100d">
-    <meta name="description" content="Adithya U R designs ML systems that move data, feed GPUs, and leave evidence behind.">
+    <meta name="description" content="Drive through Adithya U R's interactive 3D portfolio of ML systems, data platforms, GPU infrastructure, and engineering experience.">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Adithya U R — ML Systems Engineer">
-    <meta property="og:description" content="Data paths, GPU platforms, and production-grade ML systems.">
+    <meta property="og:title" content="Adithya U R — A portfolio you can drive">
+    <meta property="og:description" content="Explore ML systems, projects, and experience as one playable 3D world.">
     <meta property="og:url" content="https://adithyaur99.github.io/">
     <meta property="og:image" content="https://adithyaur99.github.io/assets/img/og.png">
     <meta name="twitter:card" content="summary_large_image">
-    <title>Adithya U R — ML Systems Engineer</title>
+    <title>Adithya U R — A Portfolio You Can Drive</title>
     <link rel="icon" href="assets/img/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,217 +19,120 @@
     <link rel="stylesheet" href="css/styles.css">
   </head>
   <body>
-    <a class="skip-link" href="#system">Skip to content</a>
+    <a class="skip-link" href="#accessible-portfolio">Skip the game</a>
     <div class="noise" aria-hidden="true"></div>
-    <header class="site-header">
-      <a class="mark" href="#top" aria-label="Adithya U R, home"><span>A</span><i></i><span>UR</span></a>
-      <div class="header-status"><span class="status-dot"></span> Stockholm, Sweden</div>
-      <a class="header-link" href="https://github.com/adithyaur99" target="_blank" rel="noreferrer">GitHub <span>↗</span></a>
-    </header>
 
-    <main id="top">
-      <section class="game-hero" aria-labelledby="hero-title">
-        <canvas id="world" tabindex="0" aria-label="Playable ML systems world. Drive with WASD or arrow keys and collect four system checkpoints."></canvas>
+    <main class="world-shell" id="top">
+      <canvas id="world" tabindex="0" aria-label="A driveable 3D portfolio world. Use WASD or arrow keys to steer. Approach a landmark and press Enter to read it."></canvas>
 
-        <div class="game-menu" id="game-menu">
-          <p class="eyebrow"><span>01</span> Adithya U R · ML systems engineer</p>
-          <h1 id="hero-title">Don’t read the résumé.<br><em>Drive through it.</em></h1>
-          <p class="hero-intro">Bring an ML system online by connecting its four missing layers. The portfolio unlocks as you explore.</p>
-          <div class="hero-actions">
-            <button class="button button-primary" id="start-game" type="button">Start the system <span>→</span></button>
-            <a class="button button-quiet" href="#system">Skip to portfolio <span>↓</span></a>
-          </div>
-          <p class="start-controls"><span>WASD / ARROWS</span> to drive · <span>F</span> fullscreen</p>
+      <header class="site-header">
+        <a class="mark" href="#top" aria-label="Adithya U R, home"><span>A</span><i></i><span>UR</span></a>
+        <div class="header-status"><span class="status-dot"></span> Portfolio world / Stockholm</div>
+        <nav class="header-links" aria-label="External links">
+          <a href="https://github.com/adithyaur99" target="_blank" rel="noreferrer">GitHub ↗</a>
+          <a href="https://www.linkedin.com/in/adithya-u-r-79586612b/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+        </nav>
+      </header>
+
+      <section class="start-screen" id="start-screen" aria-labelledby="hero-title">
+        <p class="eyebrow"><span>01</span> Adithya U R · ML systems engineer</p>
+        <h1 id="hero-title">A portfolio<br>you can <em>drive.</em></h1>
+        <p>Explore my résumé and open-source work as one connected 3D world. Every building is real experience. Every portal is a project.</p>
+        <div class="start-actions">
+          <button class="button button-primary" id="start-game" type="button">Enter the world <span>→</span></button>
+          <button class="button button-quiet" id="open-intro" type="button">Read the quick intro <span>↗</span></button>
         </div>
-
-        <div class="game-hud" id="game-hud" hidden>
-          <div class="hud-objective"><span>MISSION</span><strong>Connect the ML system</strong></div>
-          <ol class="checkpoint-list">
-            <li data-checkpoint="data"><i></i>Data</li>
-            <li data-checkpoint="compute"><i></i>Compute</li>
-            <li data-checkpoint="identity"><i></i>Identity</li>
-            <li data-checkpoint="evidence"><i></i>Evidence</li>
-          </ol>
-          <div class="hud-counter"><strong id="checkpoint-count">0 / 4</strong><span>ONLINE</span></div>
-        </div>
-
-        <div class="checkpoint-callout" id="checkpoint-callout" hidden aria-live="polite">
-          <span id="callout-index">01</span>
-          <div><strong id="callout-title">DATA CONNECTED</strong><p id="callout-copy">Portable inputs. Verifiable bytes.</p></div>
-        </div>
-
-        <div class="game-complete" id="game-complete" hidden>
-          <p class="eyebrow"><span>✓</span> System online</p>
-          <h2>Now inspect<br><em>the engineering.</em></h2>
-          <div class="hero-actions">
-            <a class="button button-primary" href="#work">Explore the work <span>↓</span></a>
-            <button class="button button-quiet" id="restart-game" type="button">Drive again <span>↻</span></button>
-          </div>
-        </div>
-
-        <div class="touch-controls" id="touch-controls" role="group" hidden aria-label="Driving controls">
-          <button type="button" data-control="left" aria-label="Turn left">←</button>
-          <div><button type="button" data-control="up" aria-label="Drive forward">↑</button><button type="button" data-control="down" aria-label="Reverse">↓</button></div>
-          <button type="button" data-control="right" aria-label="Turn right">→</button>
-        </div>
-
-        <button class="fullscreen-button" id="fullscreen-button" type="button" aria-label="Toggle fullscreen">F · FULLSCREEN</button>
-        <div class="game-status" id="game-status" aria-live="polite">System waiting for pilot</div>
-        <div class="hero-foot">
-          <span>Interactive portfolio / 2026</span>
-          <div class="scroll-line"><i></i></div>
-          <span class="hero-foot-right">Drive · Discover · Inspect</span>
+        <div class="start-controls">
+          <span><kbd>WASD</kbd> Drive</span>
+          <span><kbd>ENTER</kbd> Inspect</span>
+          <span><kbd>M</kbd> World map</span>
+          <span><kbd>F</kbd> Fullscreen</span>
         </div>
       </section>
 
-      <section class="system-strip" id="system" aria-label="System focus">
-        <p>One connected system</p>
-        <ol>
-          <li><span>01</span><strong>Move the data</strong><small>without losing integrity</small></li>
-          <li><span>02</span><strong>Feed the compute</strong><small>without hiding the cost</small></li>
-          <li><span>03</span><strong>Prove the result</strong><small>without hand-waving</small></li>
-        </ol>
+      <section class="game-hud" id="game-hud" hidden aria-label="Exploration status">
+        <div class="hud-mission">
+          <span>NOW EXPLORING</span>
+          <strong id="current-zone">Arrival plaza</strong>
+        </div>
+        <div class="hud-navigation">
+          <span class="nav-arrow" id="nav-arrow">↑</span>
+          <div><small>NEXT LANDMARK</small><strong id="target-title">About Adithya</strong><em id="target-distance">0 m</em></div>
+        </div>
+        <div class="hud-progress"><strong id="visited-count">0 / 15</strong><span>DISCOVERED</span></div>
       </section>
 
-      <section class="work section-dark" id="work" aria-labelledby="work-title">
-        <div class="section-heading reveal">
-          <p class="eyebrow"><span>02</span> Selected experiments</p>
-          <h2 id="work-title">Small systems.<br><em>Hard questions.</em></h2>
-          <p>Clean-room, independently runnable experiments about the seams where ML platforms usually break: data, scheduling, identity, and evidence.</p>
+      <div class="interaction-prompt" id="interaction-prompt" hidden aria-live="polite">
+        <kbd>ENTER</kbd>
+        <span>Read <strong id="interaction-title">About Adithya</strong></span>
+      </div>
+
+      <aside class="detail-panel" id="detail-panel" role="dialog" aria-modal="true" tabindex="-1" hidden aria-labelledby="detail-title">
+        <div class="panel-topline"><span id="detail-type">PROFILE / 01</span><span>ENTER OR ESC TO CLOSE</span></div>
+        <div class="detail-heading">
+          <div><p id="detail-period">NOW · STOCKHOLM</p><h2 id="detail-title">Adithya U R</h2></div>
+          <span class="detail-index" id="detail-index">01</span>
         </div>
-
-        <div class="project-grid">
-          <a class="project-card project-card-featured reveal" data-tilt href="https://github.com/adithyaur99/portable-dataset-integrity" target="_blank" rel="noreferrer">
-            <div class="project-top"><span>01 / DATA</span><span>View source ↗</span></div>
-            <div class="project-visual project-visual-manifest" aria-hidden="true">
-              <div class="manifest-stack"><i></i><i></i><i></i><i></i></div>
-              <div class="manifest-line"></div>
-              <div class="manifest-seal">SHA<br>256</div>
-            </div>
-            <div class="project-copy">
-              <h3>Portable Dataset Integrity</h3>
-              <p>DVC reproduces the pipeline. A portable manifest proves every published byte arrived complete and unchanged.</p>
-              <ul><li>DVC</li><li>Atomic publish</li><li>Data contracts</li></ul>
-            </div>
-          </a>
-
-          <a class="project-card reveal" data-tilt href="https://github.com/adithyaur99/flyte-skypilot-fallback" target="_blank" rel="noreferrer">
-            <div class="project-top"><span>02 / ORCHESTRATION</span><span>View source ↗</span></div>
-            <div class="project-visual project-visual-routes" aria-hidden="true">
-              <span class="route-node route-a">A</span><span class="route-node route-b">B</span><span class="route-node route-c">C</span>
-              <i class="route-one"></i><i class="route-two"></i>
-            </div>
-            <div class="project-copy">
-              <h3>Flyte × SkyPilot Fallback</h3>
-              <p>An explainable regional GPU fallback engine that retries capacity failures and stops cold on policy or authentication errors.</p>
-              <ul><li>Flyte</li><li>SkyPilot</li><li>GPU placement</li></ul>
-            </div>
-          </a>
-
-          <a class="project-card reveal" data-tilt href="https://github.com/adithyaur99/spark-gpu-feed" target="_blank" rel="noreferrer">
-            <div class="project-top"><span>03 / COMPUTE</span><span>View source ↗</span></div>
-            <div class="project-visual project-visual-feed" aria-hidden="true">
-              <div class="feed-bars"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-              <div class="feed-core">GPU</div>
-            </div>
-            <div class="project-copy">
-              <h3>Spark GPU Feed</h3>
-              <p>A deterministic model for seeing how partitions, initialization, and vectorized batches decide whether a GPU stays busy.</p>
-              <ul><li>Spark</li><li>Vectorization</li><li>Throughput</li></ul>
-            </div>
-          </a>
-
-          <a class="project-card project-card-wide reveal" data-tilt href="https://github.com/adithyaur99/credential-isolation" target="_blank" rel="noreferrer">
-            <div class="project-top"><span>04 / IDENTITY</span><span>View source ↗</span></div>
-            <div class="project-visual project-visual-lock" aria-hidden="true"><div class="lock-orbit"><i></i></div><span>PATH<br>SCOPED</span></div>
-            <div class="project-copy">
-              <h3>Credential Isolation</h3>
-              <p>Short-lived, path-scoped access with explicit refresh—and a hard guarantee that ambient credentials never become the fallback.</p>
-              <ul><li>Workload identity</li><li>Least privilege</li><li>Negative tests</li></ul>
-            </div>
-          </a>
+        <p class="detail-org" id="detail-org">ML systems engineer</p>
+        <p class="detail-lead" id="detail-lead">I make machine learning work outside the notebook.</p>
+        <div class="detail-copy" id="detail-copy"></div>
+        <ul class="detail-tags" id="detail-tags"></ul>
+        <div class="detail-actions">
+          <a class="button button-primary" id="detail-link" href="https://github.com/adithyaur99" target="_blank" rel="noreferrer">Open project <span>↗</span></a>
+          <a class="button button-quiet" id="detail-secondary" href="https://www.linkedin.com/in/adithya-u-r-79586612b/" target="_blank" rel="noreferrer">LinkedIn <span>↗</span></a>
+          <button class="panel-close" id="close-detail" type="button" aria-label="Close and keep driving">×</button>
         </div>
+      </aside>
 
-        <a class="all-work-link reveal" href="https://github.com/adithyaur99/mlops-experiments" target="_blank" rel="noreferrer">
-          <span>Explore all 25 experiments</span><strong>↗</strong>
-        </a>
-      </section>
+      <aside class="map-panel" id="map-panel" role="dialog" aria-modal="true" tabindex="-1" hidden aria-labelledby="map-title">
+        <div class="panel-topline"><span>WORLD MAP</span><span>M OR ESC TO CLOSE</span></div>
+        <div class="map-heading"><h2 id="map-title">Choose your<br><em>next landmark.</em></h2><p>Set a destination, close the map, and follow the arrow. Nothing teleports you—the drive is the point.</p></div>
+        <div class="map-grid" id="map-grid"></div>
+        <button class="panel-close" id="close-map" type="button" aria-label="Close world map">×</button>
+      </aside>
 
-      <section class="statement" aria-label="Engineering philosophy">
-        <p class="statement-small reveal">The work behind the work</p>
-        <p class="statement-copy reveal">The model is only one component. I care about the <span>whole path</span>—from noisy multimodal data to compute, evaluation, and the evidence needed to trust the result.</p>
-      </section>
+      <div class="game-toolbar" id="game-toolbar" hidden>
+        <button id="map-button" type="button">M · MAP</button>
+        <button id="restart-button" type="button">R · RESET</button>
+        <button id="fullscreen-button" type="button">F · FULLSCREEN</button>
+      </div>
 
-      <section class="experience section-dark" id="experience" aria-labelledby="experience-title">
-        <div class="section-heading section-heading-compact reveal">
-          <p class="eyebrow"><span>03</span> Experience</p>
-          <h2 id="experience-title">Built in the<br><em>real world.</em></h2>
-        </div>
+      <div class="touch-controls" id="touch-controls" role="group" hidden aria-label="Driving controls">
+        <button type="button" data-control="left" aria-label="Turn left">←</button>
+        <div><button type="button" data-control="up" aria-label="Drive forward">↑</button><button type="button" data-control="down" aria-label="Reverse">↓</button></div>
+        <button type="button" data-control="right" aria-label="Turn right">→</button>
+      </div>
+      <button class="touch-inspect" id="touch-inspect" type="button" hidden>Read</button>
 
-        <div class="timeline">
-          <article class="timeline-item reveal">
-            <div class="timeline-meta"><span>2023 — NOW</span><span>STOCKHOLM</span></div>
-            <div><h3>Data Engineer</h3><p class="company">Scania</p></div>
-            <p>Building governed data pipelines and services around high-volume, multimodal sensor data for autonomous-vehicle analytics and downstream AI workflows.</p>
-          </article>
-          <article class="timeline-item reveal">
-            <div class="timeline-meta"><span>2022 — 2023</span><span>STOCKHOLM</span></div>
-            <div><h3>Automation Specialist</h3><p class="company">Scania</p></div>
-            <p>Turned operational needs into cloud applications and automation—connecting changing demand, suppliers, and production decisions in real time.</p>
-          </article>
-          <article class="timeline-item reveal">
-            <div class="timeline-meta"><span>2021</span><span>SWEDEN</span></div>
-            <div><h3>ML Engineering Intern</h3><p class="company">Ericsson</p></div>
-            <p>Built semantic ticket retrieval with Sentence-BERT and retrieval-augmented generation, then benchmarked and deployed the strongest approach end to end.</p>
-          </article>
-          <article class="timeline-item reveal">
-            <div class="timeline-meta"><span>2020</span><span>INDIA</span></div>
-            <div><h3>Software Engineer</h3><p class="company">Agnikul Cosmos</p></div>
-            <p>Worked across trajectory optimization, payload tooling, and real-time Linux architecture for small-launch-vehicle software.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="about" id="about" aria-labelledby="about-title">
-        <div class="portrait-wrap reveal">
-          <div class="portrait-index">A / 99</div>
-          <img src="assets/img/profile.png" width="396" height="369" alt="Adithya U R smiling">
-          <div class="portrait-caption">Engineer · Builder · Data monster</div>
-        </div>
-        <div class="about-copy reveal">
-          <p class="eyebrow"><span>04</span> About</p>
-          <h2 id="about-title">Curious by default.<br><em>Rigorous on purpose.</em></h2>
-          <p>I’m Adithya, an ML systems and data engineer in Stockholm. My sweet spot is where large-scale data processing, GPU workloads, and platform engineering meet.</p>
-          <p>I hold an MSc in Autonomous Systems from KTH and a BE in Electronics and Communication Engineering. That path—from embedded systems and perception to cloud-scale ML—still shapes how I build.</p>
-        </div>
-      </section>
-
-      <section class="toolkit section-dark" id="toolkit" aria-labelledby="toolkit-title">
-        <div class="toolkit-title reveal">
-          <p class="eyebrow"><span>05</span> Toolkit</p>
-          <h2 id="toolkit-title">From sensor<br>to <em>system.</em></h2>
-        </div>
-        <div class="skill-orbits reveal">
-          <div><span>DATA</span><p>Python · SQL · PySpark · Spark · Databricks · DVC</p></div>
-          <div><span>ML / GPU</span><p>PyTorch · TensorFlow · OpenCV · TensorRT · MLflow</p></div>
-          <div><span>PLATFORM</span><p>AWS · Terraform · Docker · Flyte · SkyPilot · Modal</p></div>
-          <div><span>SYSTEMS</span><p>C · C++ · Shell · Linux · APIs · CI/CD</p></div>
-        </div>
-      </section>
-
-      <footer class="footer" id="contact">
-        <p class="eyebrow"><span>06</span> Contact</p>
-        <h2 class="reveal">Let’s build the path<br>from <em>idea to evidence.</em></h2>
-        <div class="footer-links reveal">
-          <a href="mailto:adithyaur1999@gmail.com">Email <span>↗</span></a>
-          <a href="https://www.linkedin.com/in/adithya-u-r-79586612b/" target="_blank" rel="noreferrer">LinkedIn <span>↗</span></a>
-          <a href="https://github.com/adithyaur99" target="_blank" rel="noreferrer">GitHub <span>↗</span></a>
-        </div>
-        <div class="footer-bottom"><span>Adithya U R © <span id="year">2026</span></span><span>Built as a small interactive system</span><a href="#top">Back to orbit ↑</a></div>
-      </footer>
+      <div class="world-legend" id="world-legend" hidden aria-hidden="true">
+        <span><i class="legend-experience"></i>Experience</span>
+        <span><i class="legend-project"></i>Projects</span>
+        <span><i class="legend-education"></i>Education</span>
+      </div>
+      <div class="game-status" id="game-status" aria-live="polite">World loading</div>
     </main>
 
-    <noscript><p class="noscript">This portfolio works without JavaScript; the interactive system view needs it enabled.</p></noscript>
+    <section class="accessible-portfolio" id="accessible-portfolio" aria-label="Text portfolio">
+      <a class="accessible-close" href="#top">← Back to the 3D world</a>
+      <h2>Adithya U R — ML Systems Engineer</h2>
+      <p>I design reliable paths from raw data to governed compute, evaluation, and evidence.</p>
+      <h3>Experience</h3>
+      <p>Data Engineer, Scania, 2023–present. Automation Specialist, Scania, 2022–2023. ML Engineering Intern, Ericsson, 2021. Software Engineer, Agnikul Cosmos, 2020.</p>
+      <h3>Selected open-source projects</h3>
+      <ul>
+        <li><a href="https://github.com/adithyaur99/portable-dataset-integrity">Portable Dataset Integrity</a></li>
+        <li><a href="https://github.com/adithyaur99/flyte-skypilot-fallback">Flyte × SkyPilot Fallback</a></li>
+        <li><a href="https://github.com/adithyaur99/spark-gpu-feed">Spark GPU Feed</a></li>
+        <li><a href="https://github.com/adithyaur99/credential-isolation">Credential Isolation</a></li>
+        <li><a href="https://github.com/adithyaur99/modal-gpu-data-path">Modal GPU Data Path</a></li>
+        <li><a href="https://github.com/adithyaur99/mlops-experiments">All MLOps Experiments</a></li>
+      </ul>
+      <h3>Education</h3>
+      <p>MSc Autonomous Systems, KTH. BE Electronics and Communication Engineering, Anna University.</p>
+      <p><a href="mailto:adithyaur1999@gmail.com">Email Adithya</a> · <a href="https://github.com/adithyaur99">GitHub</a> · <a href="https://www.linkedin.com/in/adithya-u-r-79586612b/">LinkedIn</a></p>
+    </section>
+
+    <noscript><p class="noscript">JavaScript is required for the 3D world. The complete text portfolio remains available below.</p></noscript>
     <script type="module" src="js/scripts.js"></script>
   </body>
 </html>
