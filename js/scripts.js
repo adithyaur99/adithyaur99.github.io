@@ -3,14 +3,26 @@ document.documentElement.classList.add("js");
 const canvas = document.querySelector("#world");
 const startScreen = document.querySelector("#start-screen");
 const startButton = document.querySelector("#start-game");
-const openIntroButton = document.querySelector("#open-intro");
+const freeRoamButton = document.querySelector("#free-roam");
+const newStoryButton = document.querySelector("#new-story");
 const gameHud = document.querySelector("#game-hud");
+const chapterLabel = document.querySelector("#chapter-label");
+const objectiveLabel = document.querySelector("#objective-label");
 const currentZone = document.querySelector("#current-zone");
 const targetTitle = document.querySelector("#target-title");
 const targetDistance = document.querySelector("#target-distance");
 const navArrow = document.querySelector("#nav-arrow");
 const visitedCount = document.querySelector("#visited-count");
+const missionProgressLabel = document.querySelector(".hud-progress > span");
+const storyCount = document.querySelector("#story-count");
 const speedReadout = document.querySelector("#speed-readout");
+const chapterCard = document.querySelector("#chapter-card");
+const chapterNumber = document.querySelector("#chapter-number");
+const chapterTitle = document.querySelector("#chapter-title");
+const chapterCopy = document.querySelector("#chapter-copy");
+const chapterProgress = document.querySelector("#chapter-progress");
+const pickupToast = document.querySelector("#pickup-toast");
+const pickupTitle = document.querySelector("#pickup-title");
 const interactionPrompt = document.querySelector("#interaction-prompt");
 const interactionTitle = document.querySelector("#interaction-title");
 const detailPanel = document.querySelector("#detail-panel");
@@ -36,6 +48,9 @@ const touchControls = document.querySelector("#touch-controls");
 const touchInspect = document.querySelector("#touch-inspect");
 const worldLegend = document.querySelector("#world-legend");
 const gameStatus = document.querySelector("#game-status");
+const endingScreen = document.querySelector("#ending-screen");
+const continueGameButton = document.querySelector("#continue-game");
+const replayStoryButton = document.querySelector("#replay-story");
 
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const touchDevice = window.matchMedia("(pointer: coarse)").matches;
@@ -51,98 +66,98 @@ const TYPE_COLORS = {
 
 const entries = [
   {
-    id: "profile", type: "profile", label: "ABOUT ADITHYA", title: "Adithya U R", org: "ML systems engineer · Stockholm", period: "NOW", x: 0, z: 21,
+    id: "profile", type: "profile", label: "CHROMEPET / ARRIVAL", title: "Adithya U R", org: "Chennai roots · Stockholm systems", period: "NOW", x: -48, z: 40,
     lead: "I make machine learning work outside the notebook.",
     copy: ["I design the path from raw data to reliable compute—and make every run reproducible, governed, and explainable.", "My sweet spot is where large-scale data processing, GPU workloads, workload identity, and platform engineering meet."],
     tags: ["ML systems", "Data platforms", "GPU infrastructure", "MLOps"],
     href: "https://github.com/adithyaur99", linkLabel: "GitHub", secondaryHref: "https://www.linkedin.com/in/adithya-u-r-79586612b/", secondaryLabel: "LinkedIn"
   },
   {
-    id: "scania-data", type: "experience", label: "SCANIA / DATA", title: "Data Engineer", org: "Scania", period: "OCT 2023 — PRESENT", x: -17, z: 13,
+    id: "scania-data", type: "experience", label: "SENSOR / DATA DEPOT", title: "Data Engineer", org: "Scania", period: "OCT 2023 — PRESENT", x: 8, z: -6,
     lead: "Building governed data paths for high-volume, multimodal sensor information.",
     copy: ["I work across ingestion, processing, transformation, quality, security, and reliable access for autonomous-vehicle analytics and downstream AI workflows.", "The recurring challenge is turning raw camera, LiDAR, RADAR, and log outputs into trustworthy inputs for people, models, and simulation."],
     tags: ["PySpark", "Databricks", "AWS", "Data governance"]
   },
   {
-    id: "scania-automation", type: "experience", label: "SCANIA / AUTOMATION", title: "Automation Specialist", org: "Scania", period: "AUG 2022 — SEP 2023", x: -24, z: 2,
+    id: "scania-automation", type: "experience", label: "AUTOMATION / YARD", title: "Automation Specialist", org: "Scania", period: "AUG 2022 — SEP 2023", x: 1, z: 7,
     lead: "Turning operational problems into cloud applications and automation.",
     copy: ["I translated business needs into data-intensive tools that connected changing demand, suppliers, and production decisions in real time.", "The work combined software, automation, and applied AI to shorten feedback loops and support faster decisions."],
     tags: ["Cloud applications", "Automation", "Applied AI", "APIs"]
   },
   {
-    id: "ericsson", type: "experience", label: "ERICSSON / ML", title: "ML Engineering Intern", org: "Ericsson", period: "JUN 2021 — OCT 2021", x: -22, z: -10,
+    id: "ericsson", type: "experience", label: "SEMANTIC / SIGNALS", title: "ML Engineering Intern", org: "Ericsson", period: "JUN 2021 — OCT 2021", x: -14, z: -13,
     lead: "Semantic support-ticket retrieval with Sentence-BERT and retrieval-augmented generation.",
     copy: ["I built and compared approaches for finding similar historical tickets, then deployed the strongest model through an end-to-end MLOps path.", "The project connected model quality to an actual retrieval workflow rather than stopping at an offline notebook."],
     tags: ["Sentence-BERT", "RAG", "NLP", "Model deployment"]
   },
   {
-    id: "agnikul", type: "experience", label: "AGNIKUL / SYSTEMS", title: "Software Engineer", org: "Agnikul Cosmos", period: "MAR 2020 — AUG 2020", x: -15, z: -22,
+    id: "agnikul", type: "experience", label: "TRAJECTORY / YARD", title: "Software Engineer", org: "Agnikul Cosmos", period: "MAR 2020 — AUG 2020", x: -12, z: 0,
     lead: "From orbital trajectories to real-time Linux for small launch vehicles.",
     copy: ["I worked across trajectory optimization, payload tooling, and real-time software architecture.", "That systems foundation still shapes how I reason about latency, constraints, failure modes, and interfaces in modern ML platforms."],
     tags: ["C++", "Linux", "Optimization", "Real-time systems"]
   },
   {
-    id: "dataset-integrity", type: "project", label: "DVC / DATA INTEGRITY", title: "Portable Dataset Integrity", org: "Open-source experiment", period: "2026", x: 16, z: 14,
+    id: "dataset-integrity", type: "project", label: "DVC / INTEGRITY WHARF", title: "Portable Dataset Integrity", org: "Open-source experiment", period: "2026", x: 22, z: 12,
     lead: "DVC reproduces the pipeline. A portable manifest proves every byte.",
     copy: ["The experiment separates development-time reproducibility from runtime verification.", "It combines deterministic fixtures, SHA-256 digests, atomic publication, completion markers, idempotency, and corruption detection without requiring cloud access or private data."],
     tags: ["DVC", "Python", "SHA-256", "Data contracts"],
     href: "https://github.com/adithyaur99/portable-dataset-integrity", linkLabel: "Open source"
   },
   {
-    id: "flyte-skypilot", type: "project", label: "FLYTE × SKYPILOT", title: "Flyte × SkyPilot Fallback", org: "Open-source experiment", period: "2026", x: 24, z: 4,
+    id: "flyte-skypilot", type: "project", label: "FLYTE × SKYPILOT TOWER", title: "Flyte × SkyPilot Fallback", org: "Open-source experiment", period: "2026", x: 24, z: -18,
     lead: "Regional GPU fallback that explains why every candidate succeeded or failed.",
     copy: ["Capacity and transient failures can retry. Policy and authentication failures stop the launch instead of silently widening access.", "The result is a deterministic SkyPilot-shaped launch plan with Flyte-style orchestration evidence and synthetic infrastructure inputs."],
     tags: ["Flyte", "SkyPilot", "GPU scheduling", "Failure policy"],
     href: "https://github.com/adithyaur99/flyte-skypilot-fallback", linkLabel: "Open source"
   },
   {
-    id: "spark-gpu", type: "project", label: "SPARK / GPU", title: "Spark GPU Feed", org: "Open-source experiment", period: "2026", x: 23, z: -8,
+    id: "spark-gpu", type: "project", label: "SPARK / GPU FOUNDRY", title: "Spark GPU Feed", org: "Open-source experiment", period: "2026", x: 31, z: -8,
     lead: "A deterministic model of whether Spark can keep a GPU fed.",
     copy: ["Partition count, model initialization, row calls, and vectorized batches become explicit variables instead of hidden benchmark assumptions.", "The simulator estimates throughput and utilization while rejecting impossible parameter combinations and overstated claims."],
     tags: ["Spark", "GPU", "Vectorization", "Throughput"],
     href: "https://github.com/adithyaur99/spark-gpu-feed", linkLabel: "Open source"
   },
   {
-    id: "credentials", type: "project", label: "IDENTITY / ACCESS", title: "Credential Isolation", org: "Open-source experiment", period: "2026", x: 17, z: -19,
+    id: "credentials", type: "project", label: "IDENTITY / ACCESS GATE", title: "Credential Isolation", org: "Open-source experiment", period: "2026", x: 27, z: 2,
     lead: "Short-lived, path-scoped credentials with no ambient fallback.",
     copy: ["The experiment verifies allowed reads, denied reads, expiry, refresh, and strict isolation from environment credentials, instance metadata, and shared profiles.", "Positive tests show intended access works; negative tests prove the boundary holds."],
     tags: ["Workload identity", "Least privilege", "Refresh", "Negative tests"],
     href: "https://github.com/adithyaur99/credential-isolation", linkLabel: "Open source"
   },
   {
-    id: "modal-gpu", type: "project", label: "MODAL / GPU DATA", title: "Modal GPU Data Path", org: "Open-source experiment", period: "2026", x: 29, z: 16,
+    id: "modal-gpu", type: "project", label: "MODAL / CLOUD TERRACE", title: "Modal GPU Data Path", org: "Open-source experiment", period: "2026", x: 35, z: -21,
     lead: "A portable data contract crossing into serverless GPU execution.",
     copy: ["This experiment makes the handoff between published data and an on-demand GPU runtime explicit: validate inputs, prepare the launch, preserve evidence, and keep cloud-specific behavior behind a narrow adapter.", "Synthetic fixtures keep the whole path independently runnable."],
     tags: ["Modal", "Serverless GPU", "Data path", "Run evidence"],
     href: "https://github.com/adithyaur99/modal-gpu-data-path", linkLabel: "Open source"
   },
   {
-    id: "experiment-index", type: "project", label: "25 EXPERIMENTS", title: "MLOps Experiments", org: "Open-source collection", period: "2026", x: 28, z: -20,
+    id: "experiment-index", type: "project", label: "25 / SYSTEMS BAZAAR", title: "MLOps Experiments", org: "Open-source collection", period: "2026", x: 35, z: -32,
     lead: "Twenty-five small systems answering concrete MLOps questions.",
     copy: ["The collection spans portable data, GPU execution, orchestration, scheduling, workload identity, evaluation, lineage, observability, and cost-aware placement.", "Every experiment has synthetic fixtures, an independent history, tests, limitations, an MIT license, and a clean-room statement."],
     tags: ["MLOps", "AWS", "Evaluation", "Open source"],
     href: "https://github.com/adithyaur99/mlops-experiments", linkLabel: "Explore all 25"
   },
   {
-    id: "kth", type: "education", label: "KTH / AUTONOMOUS", title: "MSc Autonomous Systems", org: "KTH Royal Institute of Technology", period: "AUG 2020 — AUG 2022", x: -3, z: -27,
+    id: "kth", type: "education", label: "MAA → ARN / KTH", title: "MSc Autonomous Systems", org: "KTH Royal Institute of Technology", period: "AUG 2020 — AUG 2022", x: -27, z: -26,
     lead: "Autonomous systems, perception, robotics, and the software around them.",
     copy: ["My master’s work focused on single-stage image segmentation for autonomous heavy-duty vehicles.", "The programme connected algorithms to real sensors, embedded constraints, and complete autonomous-system architectures."],
     tags: ["Computer vision", "Autonomous systems", "Segmentation", "Robotics"]
   },
   {
-    id: "anna", type: "education", label: "ANNA / ENGINEERING", title: "BE Electronics & Communication", org: "Anna University", period: "AUG 2016 — AUG 2020", x: -11, z: -34,
-    lead: "The hardware-and-systems foundation behind my software work.",
-    copy: ["Electronics, communication systems, embedded programming, and signal processing formed the base for my move into autonomous systems and ML engineering.", "My bachelor thesis explored deep-learning-based self-driving systems with TensorFlow and Nvidia Jetson."],
+    id: "anna", type: "education", label: "MIT / CHROMEPET", title: "BE Electronics & Communication", org: "Madras Institute of Technology · Anna University", period: "AUG 2016 — AUG 2020", x: -28, z: 18,
+    lead: "This is where the signal run begins: electronics, embedded systems, and the first intelligent vehicle.",
+    copy: ["At the MIT Campus in Chromepet, electronics, communication systems, embedded programming, and signal processing formed the hardware-and-systems base behind my later ML work.", "My bachelor thesis explored deep-learning-based self-driving systems with TensorFlow and Nvidia Jetson."],
     tags: ["Embedded systems", "Signal processing", "TensorFlow", "Nvidia Jetson"]
   },
   {
-    id: "toolkit", type: "toolkit", label: "TOOLKIT / SYSTEMS", title: "From Sensor to System", org: "Selected toolkit", period: "CURRENT", x: 10, z: -31,
+    id: "toolkit", type: "toolkit", label: "MIT / PROJECT GARAGE", title: "From Sensor to System", org: "Selected toolkit", period: "CURRENT", x: -19, z: 9,
     lead: "Tools matter most when their boundaries are clear.",
     copy: ["Data: Python, SQL, PySpark, Spark, Databricks, DVC. ML and GPU: PyTorch, TensorFlow, OpenCV, TensorRT, MLflow.", "Platform: AWS, Terraform, Docker, Flyte, SkyPilot, Modal. Systems: C, C++, Shell, Linux, APIs, and CI/CD."],
     tags: ["Python", "Databricks", "AWS", "PyTorch", "Terraform", "Flyte"]
   },
   {
-    id: "contact", type: "contact", label: "CONTACT / SIGNAL", title: "Let’s Build Something", org: "Adithya U R", period: "OPEN CHANNEL", x: 1, z: -38,
+    id: "contact", type: "contact", label: "MARINA / OPEN SIGNAL", title: "Let’s Build Something", org: "Adithya U R", period: "OPEN CHANNEL", x: 44, z: -30,
     lead: "If the problem lives between data, compute, identity, and evidence, I want to hear it.",
     copy: ["I’m based in Stockholm and interested in ambitious ML systems, data platform, and infrastructure work.", "Send me an email, browse the code, or continue the conversation on LinkedIn."],
     tags: ["Stockholm", "ML systems", "Data engineering", "Platform engineering"],
@@ -150,22 +165,178 @@ const entries = [
   }
 ].map((entry, index) => ({ ...entry, index: index + 1, color: TYPE_COLORS[entry.type] }));
 
+const missions = [
+  {
+    id: "first-signal", number: "01", kicker: "IGNITION", title: "Build the first machine.", location: "MIT Chromepet", targetId: "anna", ordered: false,
+    copy: "Collect the sensor, communication, and compute modules around campus. Return to MIT when the first intelligent vehicle is ready.",
+    reward: "ROVER ONLINE", completion: "A model is one part. The system around it makes the machine move.",
+    items: [
+      { id: "camera", label: "CAMERA SENSOR", x: -39, z: 26, kind: "sensor" },
+      { id: "signal", label: "ECE SIGNAL BOARD", x: -35, z: 22, kind: "signal" },
+      { id: "jetson", label: "NVIDIA JETSON", x: -34, z: 16, kind: "gpu" }
+    ]
+  },
+  {
+    id: "launch-window", number: "02", kicker: "REAL-TIME", title: "Trace the trajectory.", location: "Agnikul launch yard", targetId: "agnikul", ordered: true,
+    copy: "Cross the three trajectory gates in order. Respect the constraints, lock the path, then return to the launch console.",
+    reward: "BOOST ONLINE", completion: "Trajectory locked. Real-time checks green.",
+    items: [
+      { id: "trajectory-a", label: "TRAJECTORY A", x: -24, z: 13, kind: "ring" },
+      { id: "trajectory-b", label: "TRAJECTORY B", x: -22, z: 5, kind: "ring" },
+      { id: "trajectory-c", label: "TRAJECTORY C", x: -15, z: 4, kind: "ring" }
+    ]
+  },
+  {
+    id: "semantic-signal", number: "03", kicker: "MEANING", title: "Find the solved signal.", location: "Semantic radio district", targetId: "ericsson", ordered: false,
+    copy: "Collect the three semantic neighbors around the query beacon. Match meaning, not just keywords, then activate the radio mast.",
+    reward: "SEMANTIC COMPASS", completion: "Evaluation chose the signal that ships.",
+    items: [
+      { id: "intent", label: "USER INTENT", x: -11, z: -5, kind: "semantic" },
+      { id: "context", label: "TICKET CONTEXT", x: -17, z: -7, kind: "semantic" },
+      { id: "match", label: "SOLVED MATCH", x: -18, z: -12, kind: "semantic" }
+    ]
+  },
+  {
+    id: "sensor-to-trust", number: "04", kicker: "DATA", title: "Turn raw motion into trust.", location: "Autonomous data corridor", targetId: "scania-data", ordered: true,
+    copy: "Route a changing-demand crate, then collect Camera, LiDAR, RADAR, and Logs in order. Deliver the governed stream to the data depot.",
+    reward: "GOVERNED CAPSULE", completion: "Raw became reliable, structured, and ready for downstream systems.",
+    items: [
+      { id: "demand", label: "LIVE DEMAND", x: -4, z: 5, kind: "crate" },
+      { id: "camera-stream", label: "CAMERA", x: 0, z: 1, kind: "sensor" },
+      { id: "lidar-stream", label: "LIDAR", x: 3, z: -1, kind: "sensor" },
+      { id: "radar-stream", label: "RADAR", x: 5, z: -3, kind: "sensor" },
+      { id: "log-stream", label: "LOGS", x: 4, z: -6, kind: "data" }
+    ]
+  },
+  {
+    id: "trusted-runtime", number: "05", kicker: "OSS SYSTEMS", title: "Prove, place, and run.", location: "Open systems bazaar", targetId: "experiment-index", ordered: true,
+    copy: "Seal the DVC manifest, cross the scoped identity gate, feed the Spark GPU, dispatch through Flyte and SkyPilot, then launch the same contract on Modal.",
+    reward: "RUNTIME ONLINE", completion: "Capacity may retry. Policy may not. Every byte and decision left evidence.",
+    items: [
+      { id: "manifest", label: "DVC MANIFEST", x: 18, z: 15, kind: "manifest" },
+      { id: "token", label: "SCOPED TOKEN", x: 24, z: 5, kind: "credential" },
+      { id: "batch", label: "SPARK BATCH", x: 28, z: -5, kind: "gpu" },
+      { id: "capacity", label: "CAPACITY ROUTE", x: 22, z: -14, kind: "route" },
+      { id: "modal", label: "MODAL RUNTIME", x: 30, z: -23, kind: "cloud" }
+    ]
+  },
+  {
+    id: "leave-evidence", number: "06", kicker: "FINALE", title: "Leave evidence. Send the signal.", location: "Marina data coast", targetId: "contact", ordered: true,
+    copy: "Carry Data, Model, Run, and Evaluation evidence down the coast. Activate the lighthouse to connect Chennai roots with the systems still ahead.",
+    reward: "OPEN SIGNAL", completion: "The system is online. The channel is open.",
+    items: [
+      { id: "data-evidence", label: "DATA", x: 37, z: -36, kind: "evidence" },
+      { id: "model-evidence", label: "MODEL", x: 40, z: -35, kind: "evidence" },
+      { id: "run-evidence", label: "RUN", x: 43, z: -34, kind: "evidence" },
+      { id: "eval-evidence", label: "EVALUATION", x: 36, z: -27, kind: "evidence" }
+    ]
+  }
+];
+
+const SAVE_KEY = "adithya-signal-run-v1";
+const ACTIVATION_KINDS = new Set(["semantic", "credential", "route", "cloud"]);
+
 const state = {
   mode: "loading",
   resumeMode: "menu",
+  playMode: "story",
   elapsed: 0,
-  player: { x: 0, y: 0, z: 31, heading: 0, speed: 0, verticalVelocity: 0, airborne: false },
+  player: { x: -46, y: 0, z: 30, heading: 1.05, speed: 0, verticalVelocity: 0, airborne: false },
   visited: new Set(),
-  targetId: "profile",
+  targetId: "anna",
   nearbyId: null,
+  nearbyItemId: null,
   selectedId: null,
-  zone: "Arrival plaza",
-  cameraOrbit: 0
+  zone: "Chromepet station",
+  cameraOrbit: 0,
+  missionIndex: 0,
+  missionCollected: new Set(),
+  completedMissions: [],
+  inventory: [],
+  storyComplete: false,
+  endingPending: false,
+  chapterQueued: false,
+  chapterUntil: 0,
+  toastUntil: 0,
+  missionMessage: "Every system begins as a signal."
 };
 
 const controls = { up: false, down: false, left: false, right: false, boost: false, brake: false };
 let game = null;
 let pendingStart = false;
+let pendingMode = "story";
+let chapterUiSignature = "";
+
+function activeMission() {
+  return missions[state.missionIndex] ?? null;
+}
+
+function pointDistance(point) {
+  return Math.hypot(state.player.x - point.x, state.player.z - point.z);
+}
+
+function missionItemById(id) {
+  return activeMission()?.items.find((item) => item.id === id) ?? null;
+}
+
+function currentObjective() {
+  if (state.playMode === "free" || state.storyComplete) {
+    const entry = entryById(state.targetId) ?? nearestUnvisited();
+    return entry ? { ...entry, objectiveType: "landmark" } : null;
+  }
+  const mission = activeMission();
+  if (!mission) return null;
+  const uncollected = mission.items.filter((item) => !state.missionCollected.has(item.id));
+  const item = mission.ordered ? uncollected[0] : [...uncollected].sort((left, right) => pointDistance(left) - pointDistance(right))[0];
+  if (item) return { ...item, title: item.label, objectiveType: item.kind };
+  const entry = entryById(mission.targetId);
+  return entry ? { ...entry, title: `Return to ${entry.title}`, objectiveType: "debrief" } : null;
+}
+
+function saveStory() {
+  if (state.playMode !== "story") return;
+  const payload = {
+    version: 1,
+    missionIndex: state.missionIndex,
+    missionCollected: [...state.missionCollected],
+    completedMissions: state.completedMissions,
+    inventory: state.inventory,
+    visited: [...state.visited],
+    storyComplete: state.storyComplete
+  };
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(payload)); } catch {}
+}
+
+function loadStorySave() {
+  try {
+    const payload = JSON.parse(localStorage.getItem(SAVE_KEY) ?? "null");
+    if (!payload || payload.version !== 1 || !Number.isInteger(payload.missionIndex) || payload.missionIndex < 0 || payload.missionIndex >= missions.length) return null;
+    if (![payload.missionCollected, payload.completedMissions, payload.inventory, payload.visited].every(Array.isArray)) return null;
+    return payload;
+  } catch {
+    return null;
+  }
+}
+
+function restoreStory(payload) {
+  state.playMode = "story";
+  state.missionIndex = Math.min(payload?.missionIndex ?? 0, missions.length - 1);
+  state.missionCollected = new Set(payload?.missionCollected ?? []);
+  state.completedMissions = [...(payload?.completedMissions ?? [])];
+  state.inventory = [...(payload?.inventory ?? [])];
+  state.visited = new Set(payload?.visited ?? []);
+  state.storyComplete = Boolean(payload?.storyComplete);
+  state.endingPending = false;
+  state.chapterQueued = false;
+  state.nearbyItemId = null;
+  state.targetId = activeMission()?.targetId ?? "contact";
+}
+
+const savedStory = loadStorySave();
+if (savedStory && !savedStory.storyComplete && savedStory.missionIndex > 0) {
+  startButton.firstChild.textContent = "Continue the journey ";
+}
+newStoryButton.hidden = !savedStory || savedStory.storyComplete;
 
 function entryById(id) {
   return entries.find((entry) => entry.id === id) ?? null;
@@ -182,12 +353,13 @@ function nearestUnvisited() {
 }
 
 function getZone() {
-  if (state.player.z > 18) return "Arrival plaza";
-  if (state.player.x < -8) return "Experience boulevard";
-  if (state.player.x > 11 && state.player.z > -25) return "Open-source district";
-  if (state.player.z < -24 && state.player.x < 5) return "Education quarter";
-  if (state.player.z < -24) return "Systems gardens";
-  return "Central interchange";
+  if (state.player.x < -36) return "Chromepet station";
+  if (state.player.x < -20 && state.player.z > 8) return "MIT Chromepet";
+  if (state.player.x < -5 && state.player.z > -4) return "Trajectory yard";
+  if (state.player.x < 0 && state.player.z <= -4) return "Semantic rooftops";
+  if (state.player.x < 16) return "Autonomous data corridor";
+  if (state.player.x < 39) return "Open systems bazaar";
+  return "Marina data coast";
 }
 
 function buildMap() {
@@ -200,7 +372,7 @@ function buildMap() {
     road.className = `map-road map-road-${name}`;
     island.append(road);
   });
-  [["EXPERIENCE", "west"], ["OPEN SOURCE", "east"], ["EDUCATION + MORE", "south"]].forEach(([label, zone]) => {
+  [["CHROMEPET + MIT", "west"], ["DATA CORRIDOR", "east"], ["OSS BAZAAR → MARINA", "south"]].forEach(([label, zone]) => {
     const district = document.createElement("span");
     district.className = `map-district map-district-${zone}`;
     district.textContent = label;
@@ -211,8 +383,8 @@ function buildMap() {
     button.type = "button";
     button.className = `map-pin map-pin-${entry.type}`;
     button.dataset.destination = entry.id;
-    button.style.setProperty("--map-x", `${((entry.x + 40) / 80) * 100}%`);
-    button.style.setProperty("--map-y", `${((40 - entry.z) / 84) * 100}%`);
+    button.style.setProperty("--map-x", `${((entry.x + 50) / 100) * 100}%`);
+    button.style.setProperty("--map-y", `${((38 - entry.z) / 78) * 100}%`);
     button.setAttribute("aria-label", `Set route to ${entry.title}`);
     const dot = document.createElement("i");
     const number = document.createElement("span");
@@ -221,6 +393,12 @@ function buildMap() {
     title.textContent = entry.title;
     button.append(dot, number, title);
     button.addEventListener("click", () => {
+      if (state.playMode === "story" && !state.storyComplete) {
+        state.missionMessage = "The Signal Run keeps the active chapter route locked.";
+        closeMap();
+        updateInterface();
+        return;
+      }
       state.targetId = entry.id;
       closeMap();
       updateInterface();
@@ -273,6 +451,54 @@ function updateMapButtons() {
   });
 }
 
+function missionReady() {
+  const mission = activeMission();
+  return Boolean(mission && mission.items.every((item) => state.missionCollected.has(item.id)));
+}
+
+function queueChapterCard() {
+  state.chapterUntil = state.elapsed + 7;
+  state.chapterQueued = false;
+}
+
+function collectMissionItem(item) {
+  if (!item || state.missionCollected.has(item.id)) return;
+  state.missionCollected.add(item.id);
+  if (!state.inventory.includes(item.label)) state.inventory.push(item.label);
+  state.toastUntil = state.elapsed + 2.25;
+  pickupTitle.textContent = item.label;
+  const mission = activeMission();
+  const remaining = mission.items.length - state.missionCollected.size;
+  state.missionMessage = remaining ? `${item.label} acquired. ${remaining} objective${remaining === 1 ? "" : "s"} remaining.` : `All parts ready. Return to ${entryById(mission.targetId)?.title}.`;
+  game?.updateMissionVisuals();
+  game?.updateTargetVisual();
+  saveStory();
+  updateInterface();
+}
+
+function completeMissionAt(entryId) {
+  if (state.playMode !== "story" || state.storyComplete) return false;
+  const mission = activeMission();
+  if (!mission || mission.targetId !== entryId || !missionReady()) return false;
+  if (!state.completedMissions.includes(mission.id)) state.completedMissions.push(mission.id);
+  if (!state.inventory.includes(mission.reward)) state.inventory.push(mission.reward);
+  state.missionMessage = mission.completion;
+  game?.completeMissionVisual(mission.id);
+  if (state.missionIndex >= missions.length - 1) {
+    state.storyComplete = true;
+    state.endingPending = true;
+  } else {
+    state.missionIndex += 1;
+    state.missionCollected.clear();
+    state.targetId = activeMission().targetId;
+    state.chapterQueued = true;
+  }
+  saveStory();
+  game?.updateMissionVisuals();
+  game?.updateTargetVisual();
+  return true;
+}
+
 function updateInterface() {
   const exploring = state.mode === "exploring";
   startScreen.hidden = !["loading", "menu"].includes(state.mode);
@@ -282,42 +508,133 @@ function updateInterface() {
   touchControls.hidden = !exploring || !touchDevice;
   detailPanel.hidden = state.mode !== "reading";
   mapPanel.hidden = state.mode !== "map";
+  endingScreen.hidden = state.mode !== "complete";
 
   const nearby = entryById(state.nearbyId);
-  interactionPrompt.hidden = !exploring || !nearby || touchDevice;
-  touchInspect.hidden = !exploring || !nearby || !touchDevice;
-  if (nearby) interactionTitle.textContent = nearby.title;
+  const nearbyItem = missionItemById(state.nearbyItemId);
+  const interaction = nearbyItem ?? nearby;
+  interactionPrompt.hidden = !exploring || !interaction || touchDevice;
+  touchInspect.hidden = !exploring || !interaction || !touchDevice;
+  if (interaction) {
+    interactionTitle.textContent = nearbyItem ? `Activate ${nearbyItem.label}` : nearby.title;
+    touchInspect.textContent = nearbyItem ? "Activate" : "Read";
+  }
 
   state.zone = getZone();
   currentZone.textContent = state.zone;
-  visitedCount.textContent = `${state.visited.size} / ${entries.length}`;
+  const mission = activeMission();
+  if (state.playMode === "story" && mission && !state.storyComplete) {
+    chapterLabel.textContent = `CHAPTER ${mission.number} / ${String(missions.length).padStart(2, "0")} · ${mission.kicker}`;
+    visitedCount.textContent = `${state.missionCollected.size} / ${mission.items.length}`;
+    missionProgressLabel.textContent = missionReady() ? "RETURN TO LANDMARK" : "MISSION PARTS";
+  } else {
+    chapterLabel.textContent = state.storyComplete ? "SIGNAL RUN COMPLETE" : "FREE ROAM";
+    visitedCount.textContent = `${state.visited.size} / ${entries.length}`;
+    missionProgressLabel.textContent = "DISCOVERED";
+  }
+  storyCount.textContent = `${state.visited.size} / ${entries.length}`;
   speedReadout.textContent = `${Math.round(Math.abs(state.player.speed) * 9)} KM/H`;
 
-  const target = entryById(state.targetId) ?? nearestUnvisited();
+  const target = currentObjective();
   if (target) {
     targetTitle.textContent = target.title;
-    targetDistance.textContent = `${Math.round(distanceTo(target))} m`;
+    targetDistance.textContent = `${Math.round(pointDistance(target))} m`;
+    objectiveLabel.textContent = target.objectiveType === "debrief" ? "CHAPTER DEBRIEF" : target.objectiveType === "landmark" ? "NEXT LANDMARK" : "ACTIVE OBJECTIVE";
     const targetAngle = Math.atan2(target.x - state.player.x, -(target.z - state.player.z));
     const relativeAngle = targetAngle - state.player.heading;
     navArrow.style.transform = `rotate(${relativeAngle}rad)`;
   }
 
-  if (state.mode === "loading") gameStatus.textContent = "Building portfolio world";
-  if (state.mode === "menu") gameStatus.textContent = "World ready";
-  if (state.mode === "exploring") gameStatus.textContent = nearby ? "Landmark in range" : "Drive toward a landmark";
+  const showChapter = exploring && state.playMode === "story" && !state.storyComplete && state.elapsed < state.chapterUntil;
+  chapterCard.hidden = !showChapter;
+  if (showChapter && mission) {
+    const signature = `${mission.id}:${[...state.missionCollected].join(",")}`;
+    if (signature !== chapterUiSignature) {
+      chapterUiSignature = signature;
+      chapterNumber.textContent = `CHAPTER ${mission.number} · ${mission.kicker} · ${mission.location}`;
+      chapterTitle.textContent = mission.title;
+      chapterCopy.textContent = mission.copy;
+      chapterProgress.replaceChildren();
+      mission.items.forEach((item) => {
+        const chip = document.createElement("span");
+        chip.textContent = item.label;
+        chip.classList.toggle("is-done", state.missionCollected.has(item.id));
+        chapterProgress.append(chip);
+      });
+    }
+  } else {
+    chapterUiSignature = "";
+  }
+  pickupToast.hidden = !exploring || state.elapsed >= state.toastUntil;
+
+  if (state.mode === "loading") gameStatus.textContent = "Building Chennai memory map";
+  if (state.mode === "menu") gameStatus.textContent = "The Signal Run is ready";
+  if (state.mode === "exploring") gameStatus.textContent = nearby ? "Career landmark in range" : state.missionMessage;
   if (state.mode === "reading") gameStatus.textContent = "Reading landmark";
   if (state.mode === "map") gameStatus.textContent = "Choosing route";
+  if (state.mode === "complete") gameStatus.textContent = "All systems online";
   updateMapButtons();
+}
+
+function missionSpawn(index = state.missionIndex) {
+  return [
+    { x: -46, z: 30, heading: 1.05 },
+    { x: -29, z: 18, heading: .78 },
+    { x: -12, z: 2, heading: 0 },
+    { x: -8, z: 4, heading: 2.65 },
+    { x: 15, z: 7, heading: 2.6 },
+    { x: 34, z: -30, heading: .8 }
+  ][Math.min(index, missions.length - 1)];
+}
+
+function placePlayerAt(spawn) {
+  state.player.x = spawn.x;
+  state.player.y = 0;
+  state.player.z = spawn.z;
+  state.player.heading = spawn.heading;
+  state.player.speed = 0;
+  state.player.verticalVelocity = 0;
+  state.player.airborne = false;
+  state.nearbyId = null;
+  state.nearbyItemId = null;
+  state.cameraOrbit = 0;
+  Object.keys(controls).forEach((key) => { controls[key] = false; });
 }
 
 function startGame() {
   if (!game) {
     pendingStart = true;
+    pendingMode = "story";
     gameStatus.textContent = "World still loading";
     return;
   }
+  if (savedStory && !savedStory.storyComplete) restoreStory(savedStory);
+  else restoreStory(null);
+  placePlayerAt(missionSpawn());
   state.mode = "exploring";
   state.resumeMode = "exploring";
+  state.missionMessage = activeMission()?.copy ?? "Follow the signal.";
+  queueChapterCard();
+  game?.resetVisuals();
+  game?.updateMissionVisuals();
+  updateInterface();
+  canvas.focus({ preventScroll: true });
+}
+
+function startFreeRoam() {
+  if (!game) {
+    pendingStart = true;
+    pendingMode = "free";
+    return;
+  }
+  state.playMode = "free";
+  state.mode = "exploring";
+  state.resumeMode = "exploring";
+  state.targetId = "profile";
+  state.missionMessage = "Every landmark is open. Pick a route or follow the street signs.";
+  placePlayerAt({ x: -46, z: 30, heading: 1.05 });
+  game.resetVisuals();
+  game.updateMissionVisuals();
   updateInterface();
   canvas.focus({ preventScroll: true });
 }
@@ -325,21 +642,11 @@ function startGame() {
 function resetGame() {
   state.mode = "exploring";
   state.resumeMode = "exploring";
-  state.elapsed = 0;
-  state.player.x = 0;
-  state.player.y = 0;
-  state.player.z = 31;
-  state.player.heading = 0;
-  state.player.speed = 0;
-  state.player.verticalVelocity = 0;
-  state.player.airborne = false;
-  state.visited.clear();
-  state.targetId = "profile";
-  state.nearbyId = null;
+  const spawn = state.playMode === "story" && !state.storyComplete ? missionSpawn() : { x: -46, z: 30, heading: 1.05 };
+  placePlayerAt(spawn);
   state.selectedId = null;
-  state.cameraOrbit = 0;
-  Object.keys(controls).forEach((key) => { controls[key] = false; });
   game?.resetVisuals();
+  game?.updateMissionVisuals();
   updateInterface();
   canvas.focus({ preventScroll: true });
 }
@@ -354,24 +661,86 @@ function openEntry(id, resumeMode = "exploring") {
   state.visited.add(id);
   Object.keys(controls).forEach((key) => { controls[key] = false; });
   fillDetail(entry);
-  if (state.targetId === id) state.targetId = nearestUnvisited()?.id ?? id;
+  if (state.playMode === "free" && state.targetId === id) state.targetId = nearestUnvisited()?.id ?? id;
   game?.markVisited(id);
+  completeMissionAt(id);
   game?.updateTargetVisual();
   updateInterface();
   detailPanel.focus({ preventScroll: true });
 }
 
 function openNearby() {
-  if (state.mode === "exploring" && state.nearbyId) openEntry(state.nearbyId);
+  if (state.mode !== "exploring") return;
+  const item = missionItemById(state.nearbyItemId);
+  if (item && ACTIVATION_KINDS.has(item.kind)) {
+    collectMissionItem(item);
+    state.nearbyItemId = null;
+    return;
+  }
+  if (state.nearbyId) openEntry(state.nearbyId);
 }
 
 function closeDetail() {
   if (state.mode !== "reading") return;
+  if (state.endingPending) {
+    state.endingPending = false;
+    state.mode = "complete";
+    state.selectedId = null;
+    updateInterface();
+    continueGameButton.focus({ preventScroll: true });
+    return;
+  }
+  if (state.chapterQueued) {
+    const source = entryById(state.selectedId);
+    const objective = currentObjective();
+    if (source && objective) {
+      const dx = objective.x - source.x;
+      const dz = objective.z - source.z;
+      const length = Math.max(Math.hypot(dx, dz), .001);
+      state.player.x = source.x + dx / length * 4.15;
+      state.player.z = source.z + dz / length * 4.15;
+      state.player.heading = Math.atan2(dx, -dz);
+      state.player.speed = 0;
+    }
+  }
   state.mode = state.resumeMode;
   state.selectedId = null;
+  if (state.chapterQueued && state.mode === "exploring") queueChapterCard();
+  game?.updateMissionVisuals();
+  game?.updateTargetVisual();
   updateInterface();
   if (state.mode === "exploring") canvas.focus({ preventScroll: true });
   else startButton.focus({ preventScroll: true });
+}
+
+function continueFreeRoam() {
+  state.playMode = "free";
+  state.mode = "exploring";
+  state.resumeMode = "exploring";
+  state.targetId = nearestUnvisited()?.id ?? "contact";
+  state.missionMessage = "Signal Run complete. The whole city is open.";
+  game?.updateMissionVisuals();
+  updateInterface();
+  canvas.focus({ preventScroll: true });
+}
+
+function replayStory() {
+  try { localStorage.removeItem(SAVE_KEY); } catch {}
+  newStoryButton.hidden = true;
+  restoreStory(null);
+  state.visited.clear();
+  state.elapsed = 0;
+  state.selectedId = null;
+  state.nearbyId = null;
+  state.missionMessage = activeMission().copy;
+  placePlayerAt(missionSpawn(0));
+  state.mode = "exploring";
+  state.resumeMode = "exploring";
+  queueChapterCard();
+  game?.resetVisuals();
+  game?.updateMissionVisuals();
+  updateInterface();
+  canvas.focus({ preventScroll: true });
 }
 
 function openMap() {
@@ -405,7 +774,29 @@ const controlKeys = {
   ShiftLeft: "boost", ShiftRight: "boost", KeyB: "boost", ControlLeft: "brake"
 };
 
+function trapDialogFocus(event) {
+  if (event.code !== "Tab" || !["reading", "map"].includes(state.mode)) return false;
+  const panel = state.mode === "reading" ? detailPanel : mapPanel;
+  const focusable = [...panel.querySelectorAll("a[href]:not([hidden]), button:not([hidden]), [tabindex]:not([tabindex='-1'])")]
+    .filter((element) => !element.disabled && element.offsetParent !== null);
+  if (!focusable.length) return false;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (event.shiftKey && (document.activeElement === first || document.activeElement === panel)) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+  return true;
+}
+
 window.addEventListener("keydown", (event) => {
+  trapDialogFocus(event);
+  const interactiveTarget = event.target instanceof Element && Boolean(event.target.closest("button, a, input, select, textarea, summary, [role='button']"));
+  if (event.code === "Enter" && interactiveTarget) return;
+  if (event.code === "Enter") event.preventDefault();
   if (event.code in controlKeys) {
     event.preventDefault();
     setControl(controlKeys[event.code], true);
@@ -415,9 +806,10 @@ window.addEventListener("keydown", (event) => {
     game?.jump();
   }
   if (event.code === "Enter" && ["loading", "menu"].includes(state.mode)) startGame();
-  else if (event.code === "Enter" && state.mode === "exploring" && state.nearbyId) openNearby();
+  else if (event.code === "Enter" && state.mode === "exploring" && (state.nearbyItemId || state.nearbyId)) openNearby();
   else if (event.code === "Enter" && state.mode === "reading") closeDetail();
   else if (event.code === "Enter" && state.mode === "map") closeMap();
+  else if (event.code === "Enter" && state.mode === "complete") continueFreeRoam();
   if (event.code === "KeyM") state.mode === "map" ? closeMap() : openMap();
   if (event.code === "KeyR" && state.mode === "exploring") resetGame();
   if (event.code === "KeyF") toggleFullscreen();
@@ -458,15 +850,22 @@ touchControls.querySelector("[data-action='jump']")?.addEventListener("pointerdo
   event.preventDefault();
   game?.jump();
 });
+touchControls.querySelector("[data-action='map']")?.addEventListener("click", (event) => {
+  event.preventDefault();
+  openMap();
+});
 
 startButton.addEventListener("click", startGame);
-openIntroButton.addEventListener("click", () => openEntry("profile", "menu"));
+freeRoamButton.addEventListener("click", startFreeRoam);
 closeDetailButton.addEventListener("click", closeDetail);
 mapButton.addEventListener("click", openMap);
 closeMapButton.addEventListener("click", closeMap);
 restartButton.addEventListener("click", resetGame);
 fullscreenButton.addEventListener("click", toggleFullscreen);
 touchInspect.addEventListener("click", openNearby);
+continueGameButton.addEventListener("click", continueFreeRoam);
+replayStoryButton.addEventListener("click", replayStory);
+newStoryButton.addEventListener("click", replayStory);
 buildMap();
 updateInterface();
 
@@ -493,9 +892,10 @@ async function buildWorld() {
   skyCanvas.height = 512;
   const skyContext = skyCanvas.getContext("2d");
   const skyGradient = skyContext.createLinearGradient(0, 0, 0, 512);
-  skyGradient.addColorStop(0, "#6fb8df");
-  skyGradient.addColorStop(.55, "#cbe6dc");
-  skyGradient.addColorStop(1, "#ffe4b8");
+  skyGradient.addColorStop(0, "#63b7df");
+  skyGradient.addColorStop(.5, "#bfe5e4");
+  skyGradient.addColorStop(.82, "#f6d3a4");
+  skyGradient.addColorStop(1, "#f28c58");
   skyContext.fillStyle = skyGradient;
   skyContext.fillRect(0, 0, 16, 512);
   const skyTexture = new THREE.CanvasTexture(skyCanvas);
@@ -503,13 +903,13 @@ async function buildWorld() {
 
   const scene = new THREE.Scene();
   scene.background = skyTexture;
-  scene.fog = new THREE.Fog(0xc5ded1, 58, 142);
-  const camera = new THREE.PerspectiveCamera(48, 1, .1, 190);
-  camera.position.set(32, 24, 42);
+  scene.fog = new THREE.Fog(0xc8d9cb, 66, 155);
+  const camera = new THREE.PerspectiveCamera(48, 1, .1, 210);
+  camera.position.set(-10, 28, 54);
 
   scene.add(new THREE.HemisphereLight(0xf4fbff, 0x557046, 2.15));
   const sun = new THREE.DirectionalLight(0xfff2cf, 4.6);
-  sun.position.set(-32, 42, 28);
+  sun.position.set(48, 34, -38);
   sun.castShadow = !touchDevice;
   sun.shadow.mapSize.set(1024, 1024);
   sun.shadow.camera.left = -58;
@@ -523,26 +923,29 @@ async function buildWorld() {
     new THREE.SphereGeometry(5.8, 20, 12),
     new THREE.MeshBasicMaterial({ color: 0xfff1b8, fog: false })
   );
-  sunDisc.position.set(-58, 44, -86);
+  sunDisc.position.set(76, 34, -82);
   scene.add(sunDisc);
 
   const world = new THREE.Group();
   scene.add(world);
 
   const materials = {
-    water: new THREE.MeshPhysicalMaterial({ color: 0x68bfc9, roughness: .2, metalness: .08, transparent: true, opacity: .9 }),
-    sand: new THREE.MeshStandardMaterial({ color: 0xe8bd73, roughness: .96 }),
-    grass: new THREE.MeshStandardMaterial({ color: 0x76a853, roughness: .96 }),
-    grassDark: new THREE.MeshStandardMaterial({ color: 0x4f7d49, roughness: .98 }),
-    road: new THREE.MeshStandardMaterial({ color: 0x2b3538, roughness: .86 }),
-    roadLine: new THREE.MeshBasicMaterial({ color: 0xffe6a7 }),
-    cream: new THREE.MeshStandardMaterial({ color: 0xfff2d4, roughness: .72 }),
+    water: new THREE.MeshPhysicalMaterial({ color: 0x2396b7, roughness: .22, metalness: .08, transparent: true, opacity: .92 }),
+    sand: new THREE.MeshStandardMaterial({ color: 0xeabf72, roughness: .96 }),
+    grass: new THREE.MeshStandardMaterial({ color: 0x6f9d56, roughness: .96 }),
+    grassDark: new THREE.MeshStandardMaterial({ color: 0x39785d, roughness: .98 }),
+    road: new THREE.MeshStandardMaterial({ color: 0x33383a, roughness: .78 }),
+    roadLine: new THREE.MeshBasicMaterial({ color: 0xf3b544 }),
+    cream: new THREE.MeshStandardMaterial({ color: 0xf4e1bb, roughness: .72 }),
     dark: new THREE.MeshStandardMaterial({ color: 0x182c34, roughness: .68, metalness: .12 }),
-    orange: new THREE.MeshStandardMaterial({ color: 0xf07b4a, roughness: .58 }),
-    blue: new THREE.MeshStandardMaterial({ color: 0x4fa8c7, roughness: .45, metalness: .12 }),
+    orange: new THREE.MeshStandardMaterial({ color: 0xef6c35, roughness: .58 }),
+    blue: new THREE.MeshStandardMaterial({ color: 0x2396b7, roughness: .45, metalness: .12 }),
     purple: new THREE.MeshStandardMaterial({ color: 0x8d79c6, roughness: .62 }),
-    lime: new THREE.MeshStandardMaterial({ color: 0xa9d95c, roughness: .54 }),
-    pink: new THREE.MeshStandardMaterial({ color: 0xe78683, roughness: .6 }),
+    lime: new THREE.MeshStandardMaterial({ color: 0x2fa66f, roughness: .54 }),
+    pink: new THREE.MeshStandardMaterial({ color: 0xd84c86, roughness: .6 }),
+    oxide: new THREE.MeshStandardMaterial({ color: 0xa94432, roughness: .82 }),
+    concrete: new THREE.MeshStandardMaterial({ color: 0xb9aa8f, roughness: .9 }),
+    yellow: new THREE.MeshStandardMaterial({ color: 0xf3b544, roughness: .64 }),
     glass: new THREE.MeshPhysicalMaterial({ color: 0x9bd6df, roughness: .12, transmission: .18, transparent: true, opacity: .8 }),
     tire: new THREE.MeshStandardMaterial({ color: 0x172024, roughness: .9 }),
     white: new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .82 })
@@ -558,14 +961,24 @@ async function buildWorld() {
     return mesh;
   }
 
-  const water = addMesh(world, new THREE.CircleGeometry(110, 72), materials.water, [0, -1.28, 0], [-Math.PI / 2, 0, 0], false);
+  const staticColliders = [];
+  const cameraBlockers = [];
+  const cameraBlockerMaterial = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, colorWrite: false });
+  function addCameraBlocker(x, z, width, depth, height, rotationY = 0) {
+    const blocker = addMesh(world, new THREE.BoxGeometry(width, height, depth), cameraBlockerMaterial, [x, .58 + height / 2, z], [0, rotationY, 0], false);
+    blocker.userData.cameraBlocker = true;
+    cameraBlockers.push(blocker);
+    return blocker;
+  }
+
+  const water = addMesh(world, new THREE.PlaneGeometry(30, 120), materials.water, [53, -.72, -4], [-Math.PI / 2, 0, 0], false);
   water.material.side = THREE.DoubleSide;
-  addMesh(world, new THREE.CylinderGeometry(52, 55, 1.5, 64), materials.sand, [0, -.72, 0]);
-  addMesh(world, new THREE.CylinderGeometry(49.5, 52, 1.2, 64), materials.grass, [0, -.08, 0]);
-  addMesh(world, new THREE.CircleGeometry(46.5, 64), materials.grassDark, [0, .535, 0], [-Math.PI / 2, 0, 0]);
+  addMesh(world, new THREE.BoxGeometry(108, 1.2, 82), materials.sand, [-1, -.66, -1]);
+  addMesh(world, new THREE.BoxGeometry(98, .7, 76), materials.grass, [-4, .02, 0]);
+  addMesh(world, new THREE.PlaneGeometry(9, 76), materials.sand, [43, .39, 0], [-Math.PI / 2, 0, 0], false);
 
   const districtPatches = [
-    [-20, -3, 22, 49, 0x5b958d], [21, -3, 23, 49, 0x91b959], [0, -33, 30, 15, 0x8e7fba]
+    [-30, 16, 32, 31, 0xb88768], [-10, -9, 29, 38, 0x608f75], [22, -5, 34, 51, 0x728f68], [38, -25, 12, 19, 0xb66d57]
   ];
   districtPatches.forEach(([x, z, width, depth, color]) => {
     const patchMaterial = new THREE.MeshStandardMaterial({ color, roughness: .95, transparent: true, opacity: .58 });
@@ -605,14 +1018,15 @@ async function buildWorld() {
     return curve;
   }
 
-  addRoad([[0, 43], [-1, 31], [1, 20], [-1, 7], [1, -8], [-1, -23], [0, -44]], 5.6);
-  addRoad([[0, 23], [-10, 20], [-18, 13], [-24, 2], [-22, -10], [-15, -22], [0, -24]], 4.7);
-  addRoad([[0, 20], [10, 17], [17, 14], [24, 4], [21, -7], [28, -18], [18, -23], [0, -20]], 4.7);
-  addRoad([[0, -20], [-12, -28], [-18, -34], [-4, -35], [8, -34], [18, -32], [0, -42]], 4.6);
+  addRoad([[-49, 33], [-42, 29], [-35, 23], [-28, 18], [-19, 9], [-12, 0], [0, 6], [8, -6]], 5.6);
+  addRoad([[-20, 10], [-16, 0], [-14, -13], [-27, -26]], 4.7);
+  addRoad([[0, 6], [13, 10], [22, 12], [27, 2], [31, -8], [24, -18], [35, -21], [35, -32], [44, -30]], 5);
+  addRoad([[-14, -13], [0, -8], [8, -6], [20, -4], [31, -8]], 4.6);
+  addRoad([[35, 19], [38, 6], [41, -10], [44, -30]], 4.6);
 
-  [[0, 22], [0, -20], [0, -36]].forEach(([x, z]) => addMesh(world, new THREE.CylinderGeometry(4.2, 4.2, .09, 32), materials.road, [x, .62, z], [0, 0, 0], false));
+  [[-42, 29], [-28, 18], [0, 6], [27, 2], [35, -32]].forEach(([x, z]) => addMesh(world, new THREE.CylinderGeometry(4.15, 4.15, .09, 32), materials.road, [x, .62, z], [0, 0, 0], false));
 
-  function makeCanvasSprite(lines, accent = "#f07b4a", scale = [8.2, 2.1]) {
+  function makeCanvasSprite(lines, accent = "#f07b4a", scale = [6.4, 1.6]) {
     const labelCanvas = document.createElement("canvas");
     labelCanvas.width = 1024;
     labelCanvas.height = 256;
@@ -636,15 +1050,18 @@ async function buildWorld() {
     return sprite;
   }
 
+  const districtSigns = [];
   function makeDistrictSign(title, subtitle, x, z, color) {
     const sign = makeCanvasSprite([subtitle, title], color, [7.8, 1.95]);
     sign.position.set(x, 5.8, z);
     world.add(sign);
+    districtSigns.push(sign);
     [-3.6, 3.6].forEach((offset) => addMesh(world, new THREE.CylinderGeometry(.08, .11, 4.5, 8), materials.dark, [x + offset, 2.7, z]));
   }
-  makeDistrictSign("EXPERIENCE VALLEY", "WEST LOOP", -12, 26, "#4fa8c7");
-  makeDistrictSign("OPEN-SOURCE RIDGE", "EAST LOOP", 13, 25, "#f07b4a");
-  makeDistrictSign("SYSTEMS GARDENS", "SOUTH LOOP", 0, -27, "#8d79c6");
+  makeDistrictSign("வணக்கம், சென்னை", "VANAKKAM, CHENNAI", -40, 38, "#ef6c35");
+  makeDistrictSign("MIT CHROMEPET", "குரோம்பேட்டை · CAMPUS ROAD", -26, 31, "#a94432");
+  makeDistrictSign("SYSTEMS BAZAAR", "DATA · IDENTITY · COMPUTE", 23, 20, "#138a64");
+  makeDistrictSign("MARINA DATA COAST", "OPEN SIGNAL →", 39, -17, "#2396b7");
 
   let randomSeed = 93017;
   function random() {
@@ -655,27 +1072,135 @@ async function buildWorld() {
   function addTree(x, z, scale = 1) {
     const tree = new THREE.Group();
     tree.position.set(x, .58, z);
-    addMesh(tree, new THREE.CylinderGeometry(.13 * scale, .2 * scale, 1.1 * scale, 7), new THREE.MeshStandardMaterial({ color: 0x83583b, roughness: .96 }), [0, .55 * scale, 0]);
-    addMesh(tree, new THREE.IcosahedronGeometry(.78 * scale, 1), random() > .45 ? materials.grass : materials.lime, [0, 1.45 * scale, 0]);
-    addMesh(tree, new THREE.IcosahedronGeometry(.58 * scale, 1), materials.grassDark, [.25 * scale, 1.75 * scale, -.08], [0, 0, 0], false);
+    addMesh(tree, new THREE.CylinderGeometry(.12 * scale, .2 * scale, 2.45 * scale, 7), new THREE.MeshStandardMaterial({ color: 0x83583b, roughness: .96 }), [0, 1.22 * scale, 0], [0, 0, (random() - .5) * .12]);
+    for (let leaf = 0; leaf < 7; leaf += 1) {
+      const angle = leaf / 7 * Math.PI * 2;
+      const frond = addMesh(tree, new THREE.ConeGeometry(.34 * scale, 1.9 * scale, 5), leaf % 2 ? materials.grassDark : materials.lime, [Math.cos(angle) * .55 * scale, 2.65 * scale, Math.sin(angle) * .55 * scale], [Math.PI / 2.6, 0, -angle], false);
+      frond.rotation.y = angle;
+    }
     world.add(tree);
   }
 
-  for (let index = 0; index < 74; index += 1) {
-    const angle = random() * Math.PI * 2;
-    const radius = 31 + random() * 15;
-    const x = Math.cos(angle) * radius;
-    const z = Math.sin(angle) * radius;
-    if (entries.every((entry) => Math.hypot(entry.x - x, entry.z - z) > 5.5)) addTree(x, z, .72 + random() * .68);
+  for (let index = 0; index < 58; index += 1) {
+    const x = -47 + random() * 89;
+    const z = -36 + random() * 72;
+    if (entries.every((entry) => Math.hypot(entry.x - x, entry.z - z) > 5.8)) addTree(x, z, .58 + random() * .62);
   }
 
-  for (let index = 0; index < 30; index += 1) {
-    const angle = random() * Math.PI * 2;
-    const radius = 43 + random() * 10;
-    const height = 4 + random() * 8;
-    const rock = addMesh(world, new THREE.ConeGeometry(2.6 + random() * 2.4, height, 5), random() > .5 ? materials.sand : materials.purple, [Math.cos(angle) * radius, height / 2 - .1, Math.sin(angle) * radius], [0, random() * Math.PI, 0]);
-    rock.scale.x = .7 + random() * .7;
+  function addCityBlock(x, z, width, depth, height, colorMaterial = materials.cream) {
+    const block = new THREE.Group();
+    block.position.set(x, .58, z);
+    addMesh(block, new THREE.BoxGeometry(width, height, depth), colorMaterial, [0, height / 2, 0]);
+    addMesh(block, new THREE.BoxGeometry(width + .18, .18, depth + .18), materials.oxide, [0, height + .09, 0]);
+    if (height > 2.8) {
+      addMesh(block, new THREE.CylinderGeometry(.46, .5, .62, 12), random() > .5 ? materials.blue : materials.dark, [width * .22, height + .4, 0]);
+    }
+    const windows = Math.max(2, Math.floor(width));
+    for (let index = 0; index < windows; index += 1) {
+      const wx = -width / 2 + .55 + index * ((width - 1.1) / Math.max(windows - 1, 1));
+      addMesh(block, new THREE.BoxGeometry(.32, .48, .05), materials.glass, [wx, Math.min(height * .56, 1.8), -depth / 2 - .03], [0, 0, 0], false);
+    }
+    world.add(block);
+    staticColliders.push({ x, z, halfX: width / 2 + .72, halfZ: depth / 2 + .72 });
+    addCameraBlocker(x, z, width + .3, depth + .3, height + .35);
   }
+
+  [
+    [-46, 17, 5, 4, 3.2], [-40, 12, 6, 4, 4.4], [-34, 7, 4.8, 4, 3.6], [-23, 30, 7, 4, 4.5],
+    [-14, 25, 5, 5, 3.2], [-5, 26, 7, 4, 5], [5, 26, 5, 5, 3.8], [15, 27, 6, 4, 4.6],
+    [30, 28, 7, 4, 4.2], [39, 24, 4, 5, 5.4], [-5, -19, 6, 4, 3.6], [6, -20, 5, 5, 4.4],
+    [14, -28, 6, 4, 3.8], [22, -32, 5, 4, 4.7], [-40, -9, 6, 5, 4.2], [-38, -20, 5, 4, 3.4]
+  ].forEach(([x, z, width, depth, height], index) => addCityBlock(x, z, width, depth, height, index % 3 === 0 ? materials.concrete : index % 3 === 1 ? materials.cream : materials.pink));
+
+  for (let index = 0; index < 18; index += 1) {
+    const x = -45 + index * 5.1;
+    addMesh(world, new THREE.CylinderGeometry(.06, .08, 4.2, 6), materials.dark, [x, 2.6, 36], [0, 0, 0], false);
+    addMesh(world, new THREE.BoxGeometry(4.7, .08, .12), materials.dark, [x + 2.5, 4.4, 36], [0, 0, 0], false);
+  }
+
+  const rail = new THREE.Group();
+  rail.position.set(0, 0, 0);
+  addMesh(rail, new THREE.BoxGeometry(101, .18, .18), materials.dark, [0, 1.52, 35.55], [0, 0, 0], false);
+  addMesh(rail, new THREE.BoxGeometry(101, .18, .18), materials.dark, [0, 1.52, 36.45], [0, 0, 0], false);
+  for (let x = -48; x <= 48; x += 2.2) addMesh(rail, new THREE.BoxGeometry(.16, .12, 1.25), materials.concrete, [x, 1.42, 36], [0, 0, 0], false);
+  for (let x = -47; x <= 47; x += 7) addMesh(rail, new THREE.BoxGeometry(.55, 2.2, .55), materials.concrete, [x, .55, 36]);
+  world.add(rail);
+
+  const station = new THREE.Group();
+  station.position.set(-43, .58, 35.1);
+  addMesh(station, new THREE.BoxGeometry(13, .32, 3.2), materials.concrete, [0, 1.02, 0]);
+  addMesh(station, new THREE.BoxGeometry(10, .16, 3.8), materials.oxide, [0, 4.25, 0]);
+  [-4.2, 0, 4.2].forEach((x) => addMesh(station, new THREE.BoxGeometry(.2, 3.1, .2), materials.dark, [x, 2.65, 0]));
+  const stationBoard = makeCanvasSprite(["குரோம்பேட்டை", "CHROMEPET"], "#138a64", [7.4, 1.75]);
+  stationBoard.position.set(0, 5.25, -1.2);
+  station.add(stationBoard);
+  districtSigns.push(stationBoard);
+  world.add(station);
+  staticColliders.push({ x: -43, z: 35.1, halfX: 6.85, halfZ: 2.15 });
+  addCameraBlocker(-43, 35.1, 13.2, 3.5, 4.65);
+
+  const train = new THREE.Group();
+  for (let carIndex = 0; carIndex < 3; carIndex += 1) {
+    const car = new THREE.Group();
+    car.position.x = carIndex * 5.4;
+    addMesh(car, new THREE.BoxGeometry(5, 2.2, 2), materials.cream, [0, 2.82, 36]);
+    addMesh(car, new THREE.BoxGeometry(5.08, .42, 2.04), materials.lime, [0, 2.03, 36]);
+    [-1.55, -.52, .52, 1.55].forEach((x) => addMesh(car, new THREE.BoxGeometry(.7, .58, .04), materials.glass, [x, 3.05, 34.98], [0, 0, 0], false));
+    train.add(car);
+  }
+  world.add(train);
+
+  const flyover = new THREE.Group();
+  flyover.position.set(-34, .58, 31);
+  flyover.rotation.y = -.55;
+  addCameraBlocker(-34, 31, 18.2, 4.35, 4.9, -.55);
+  addMesh(flyover, new THREE.BoxGeometry(18, .55, 4.1), materials.concrete, [0, 4.3, 0]);
+  addMesh(flyover, new THREE.BoxGeometry(18, .12, 3.1), materials.road, [0, 4.62, 0], [0, 0, 0], false);
+  [-6.5, 0, 6.5].forEach((x) => addMesh(flyover, new THREE.BoxGeometry(.7, 4.1, 1.1), materials.concrete, [x, 2.05, 0]));
+  world.add(flyover);
+
+  function addTeaStall(x, z, rotation = 0) {
+    const stall = new THREE.Group();
+    stall.position.set(x, .58, z);
+    stall.rotation.y = rotation;
+    addMesh(stall, new THREE.BoxGeometry(3, 1.6, 1.7), materials.oxide, [0, .8, 0]);
+    addMesh(stall, new THREE.BoxGeometry(3.45, .18, 2.15), materials.yellow, [0, 1.72, 0]);
+    addMesh(stall, new THREE.CylinderGeometry(.18, .18, .55, 12), materials.cream, [-.65, 1.92, -.15]);
+    addMesh(stall, new THREE.TorusGeometry(.12, .035, 6, 16, Math.PI * 1.55), materials.dark, [-.45, 2.02, -.15], [Math.PI / 2, 0, 0], false);
+    world.add(stall);
+  }
+  addTeaStall(-31, 13, -.4);
+  addTeaStall(14, 4, .2);
+  addTeaStall(37, -27, -.6);
+
+  function addGpuCrate(x, z, scale = 1, material = materials.dark) {
+    const crate = new THREE.Group();
+    crate.position.set(x, .58, z);
+    addMesh(crate, new THREE.BoxGeometry(1.7 * scale, .95 * scale, 1.35 * scale), material, [0, .5 * scale, 0]);
+    for (let fin = -3; fin <= 3; fin += 1) addMesh(crate, new THREE.BoxGeometry(.08 * scale, .78 * scale, 1.46 * scale), materials.orange, [fin * .22 * scale, .55 * scale, 0]);
+    world.add(crate);
+  }
+  [[18, 8, .8], [20, 6, .65], [24, -5, .8], [27, -7, .72], [32, -12, .9], [30, -24, .65]].forEach(([x, z, scale], index) => addGpuCrate(x, z, scale, index % 2 ? materials.blue : materials.dark));
+
+  const trafficCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-42, .58, 29), new THREE.Vector3(-28, .58, 18), new THREE.Vector3(-12, .58, 0),
+    new THREE.Vector3(0, .58, 6), new THREE.Vector3(13, .58, 10), new THREE.Vector3(27, .58, 2),
+    new THREE.Vector3(31, .58, -8), new THREE.Vector3(35, .58, -24), new THREE.Vector3(10, .58, -8),
+    new THREE.Vector3(-14, .58, -13), new THREE.Vector3(-20, .58, 8)
+  ], true, "catmullrom", .18);
+  const trafficVehicles = [];
+  function addTrafficAuto(color, offset, speed) {
+    const auto = new THREE.Group();
+    addMesh(auto, new THREE.BoxGeometry(1.15, .55, 1.6), color, [0, .58, 0]);
+    addMesh(auto, new THREE.BoxGeometry(1.08, .72, .85), materials.yellow, [0, 1.12, .2]);
+    addMesh(auto, new THREE.BoxGeometry(.98, .42, .04), materials.glass, [0, 1.2, -.23], [-.08, 0, 0], false);
+    [-.52, .52].forEach((x) => addMesh(auto, new THREE.CylinderGeometry(.22, .22, .18, 12), materials.tire, [x, .38, .48], [0, 0, Math.PI / 2]));
+    addMesh(auto, new THREE.CylinderGeometry(.22, .22, .18, 12), materials.tire, [0, .38, -.68], [0, 0, Math.PI / 2]);
+    world.add(auto);
+    trafficVehicles.push({ auto, offset, speed });
+  }
+  addTrafficAuto(materials.lime, .08, .018);
+  addTrafficAuto(materials.oxide, .53, .014);
 
   const clouds = [];
   function addCloud(x, y, z, scale) {
@@ -693,11 +1218,57 @@ async function buildWorld() {
   addCloud(38, 18, -10, 1.8);
   addCloud(-42, 17, 15, 1.15);
 
-  const rampZones = [[7.5, 8], [-8, -17], [17, -27]];
+  const rampZones = [[-23, 14], [12, -4], [37, -26]];
   rampZones.forEach(([x, z], index) => {
     const ramp = addMesh(world, new THREE.BoxGeometry(3.4, .45, 4.4), index === 1 ? materials.blue : materials.orange, [x, .95, z], [-.17, index * .35, 0]);
     addMesh(ramp, new THREE.BoxGeometry(2.6, .06, .32), materials.cream, [0, .27, -.8], [0, 0, 0], false);
     addMesh(ramp, new THREE.BoxGeometry(2.6, .06, .32), materials.cream, [0, .27, .3], [0, 0, 0], false);
+  });
+
+  const missionVisuals = new Map();
+  const missionMaterials = {
+    sensor: materials.blue, signal: materials.pink, gpu: materials.orange, ring: materials.yellow,
+    semantic: materials.purple, crate: materials.oxide, data: materials.cream, manifest: materials.lime,
+    credential: materials.yellow, route: materials.blue, cloud: materials.cream, evidence: materials.orange
+  };
+  missions.forEach((mission) => {
+    mission.items.forEach((item) => {
+      const group = new THREE.Group();
+      group.position.set(item.x, .78, item.z);
+      const material = missionMaterials[item.kind] ?? materials.orange;
+      const animated = [];
+      const aura = addMesh(group, new THREE.TorusGeometry(1.2, .075, 8, 44), new THREE.MeshBasicMaterial({ color: material.color, transparent: true, opacity: .82 }), [0, .15, 0], [Math.PI / 2, 0, 0], false);
+      animated.push(aura);
+      if (item.kind === "ring") {
+        const gate = addMesh(group, new THREE.TorusGeometry(1.4, .16, 10, 48), material, [0, 1.55, 0], [0, 0, 0]);
+        addMesh(group, new THREE.BoxGeometry(.18, 3.1, .18), materials.dark, [-1.55, 1.55, 0]);
+        addMesh(group, new THREE.BoxGeometry(.18, 3.1, .18), materials.dark, [1.55, 1.55, 0]);
+        animated.push(gate);
+      } else if (["gpu", "manifest", "crate", "data"].includes(item.kind)) {
+        const core = addMesh(group, new THREE.BoxGeometry(1.18, .82, 1.04), material, [0, 1.05, 0], [.12, .2, .05]);
+        for (let fin = -2; fin <= 2; fin += 1) addMesh(group, new THREE.BoxGeometry(.07, .7, 1.14), materials.dark, [fin * .2, 1.08, 0]);
+        animated.push(core);
+      } else if (item.kind === "credential") {
+        const key = addMesh(group, new THREE.TorusGeometry(.52, .14, 8, 28), material, [0, 1.25, 0], [Math.PI / 2, 0, 0]);
+        addMesh(group, new THREE.BoxGeometry(.25, .25, 1.35), material, [0, 1.25, .85]);
+        animated.push(key);
+      } else if (item.kind === "cloud") {
+        [[0, 1.2, 0, .68], [-.62, 1.1, 0, .48], [.62, 1.12, .05, .5], [.12, 1.62, 0, .48]].forEach(([x, y, z, scale]) => animated.push(addMesh(group, new THREE.IcosahedronGeometry(scale, 1), material, [x, y, z])));
+      } else if (item.kind === "evidence") {
+        const capsule = addMesh(group, new THREE.CylinderGeometry(.46, .46, 1.35, 10), material, [0, 1.15, 0]);
+        addMesh(group, new THREE.SphereGeometry(.46, 10, 7), materials.cream, [0, 1.82, 0]);
+        animated.push(capsule);
+      } else {
+        const orb = addMesh(group, new THREE.IcosahedronGeometry(.72, 1), material, [0, 1.25, 0]);
+        const orbit = addMesh(group, new THREE.TorusGeometry(1.08, .06, 8, 42), materials.cream, [0, 1.25, 0], [.55, .2, 0], false);
+        animated.push(orb, orbit);
+      }
+      const label = makeCanvasSprite([`CHAPTER ${mission.number}`, item.label], `#${material.color.getHexString()}`, [5.2, 1.28]);
+      label.position.set(0, 3.55, 0);
+      group.add(label);
+      world.add(group);
+      missionVisuals.set(item.id, { group, aura, animated, label, missionId: mission.id, item });
+    });
   });
 
   function entryMaterials(entry) {
@@ -711,19 +1282,20 @@ async function buildWorld() {
     group.position.set(entry.x, .62, entry.z);
     const mat = entryMaterials(entry);
     const animated = [];
-    const pad = addMesh(group, new THREE.CylinderGeometry(3.05, 3.35, .28, 16), mat.cream, [0, .14, 0]);
-    const ringMaterial = new THREE.MeshBasicMaterial({ color: entry.color, transparent: true, opacity: .9 });
+    const padMaterial = entry.type === "education" ? materials.oxide : entry.type === "project" ? materials.concrete : mat.cream;
+    const pad = addMesh(group, new THREE.CylinderGeometry(3.05, 3.35, .18, 16), padMaterial, [0, .09, 0]);
+    const ringMaterial = new THREE.MeshBasicMaterial({ color: entry.color, transparent: true, opacity: .46 });
     const ring = addMesh(group, new THREE.TorusGeometry(2.72, .09, 8, 56), ringMaterial, [0, .32, 0], [Math.PI / 2, 0, 0], false);
-    const beamMaterial = new THREE.MeshBasicMaterial({ color: entry.color, transparent: true, opacity: .045, depthWrite: false, side: THREE.DoubleSide });
+    const beamMaterial = new THREE.MeshBasicMaterial({ color: entry.color, transparent: true, opacity: .012, depthWrite: false, side: THREE.DoubleSide });
     const beam = addMesh(group, new THREE.CylinderGeometry(1.45, 2.25, 9, 20, 1, true), beamMaterial, [0, 4.5, 0], [0, 0, 0], false);
 
     if (entry.id === "profile") {
-      addMesh(group, new THREE.BoxGeometry(4.6, 2.2, 3.4), mat.cream, [0, 1.42, .25]);
-      addMesh(group, new THREE.ConeGeometry(3.25, 1.55, 4), materials.orange, [0, 3.18, .25], [0, Math.PI / 4, 0]);
-      const core = addMesh(group, new THREE.IcosahedronGeometry(.75, 2), mat.accent, [0, 3.45, -.05]);
-      const orbit = addMesh(group, new THREE.TorusGeometry(1.3, .055, 8, 64), materials.dark, [0, 3.45, -.05], [.72, .25, 0]);
+      addMesh(group, new THREE.BoxGeometry(4.7, 2.5, 2.4), materials.oxide, [0, 1.52, .25]);
+      addMesh(group, new THREE.BoxGeometry(5.25, .26, 2.9), materials.yellow, [0, 2.9, .25]);
+      const core = addMesh(group, new THREE.IcosahedronGeometry(.75, 2), mat.accent, [0, 3.8, -.05]);
+      const orbit = addMesh(group, new THREE.TorusGeometry(1.3, .055, 8, 64), materials.dark, [0, 3.8, -.05], [.72, .25, 0]);
       animated.push(core, orbit);
-      [-1.5, 1.5].forEach((x) => addMesh(group, new THREE.BoxGeometry(.78, 1.2, .12), materials.glass, [x, 1.45, -1.48]));
+      [-1.5, 0, 1.5].forEach((x) => addMesh(group, new THREE.BoxGeometry(.78, 1.2, .12), materials.glass, [x, 1.45, -1.02]));
     } else if (entry.id === "scania-data") {
       [-1.3, 0, 1.3].forEach((x, index) => {
         addMesh(group, new THREE.CylinderGeometry(.62, .78, 2.3 + index * .65, 10), index === 1 ? mat.accent : mat.blue, [x, 1.45 + index * .32, 0]);
@@ -772,7 +1344,7 @@ async function buildWorld() {
         addMesh(group, new THREE.BoxGeometry(.13, .5, .15), materials.orange, [index * .52, 3.75, 0]);
       }
       animated.push(chip);
-    } else if (entry.id === "credential-isolation") {
+    } else if (entry.id === "credentials") {
       addMesh(group, new THREE.BoxGeometry(4.5, 3.5, 3.2), materials.dark, [0, 2, .25]);
       const door = addMesh(group, new THREE.CylinderGeometry(1.25, 1.25, .3, 20), mat.accent, [0, 2, -1.5], [Math.PI / 2, 0, 0]);
       const lock = addMesh(group, new THREE.TorusGeometry(.46, .14, 8, 30, Math.PI), materials.cream, [0, 2.15, -1.72]);
@@ -785,7 +1357,7 @@ async function buildWorld() {
         const cube = addMesh(group, new THREE.BoxGeometry(.38, .38, .38), mat.accent, [Math.sin(index) * .8, 1 + index * .82, -.7]);
         animated.push(cube);
       }
-    } else if (entry.id === "mlops") {
+    } else if (entry.id === "experiment-index") {
       [-1.7, 0, 1.7].forEach((x, index) => {
         addMesh(group, new THREE.CylinderGeometry(.55, .72, 1.25 + index * .5, 8), [materials.blue, mat.accent, materials.orange][index], [x, 1 + index * .25, 0]);
       });
@@ -796,18 +1368,29 @@ async function buildWorld() {
       for (let x = -1.7; x <= 1.7; x += .85) addMesh(group, new THREE.CylinderGeometry(.12, .12, 1.8, 8), mat.accent, [x, 1.35, -1.62]);
       addMesh(group, new THREE.ConeGeometry(2.2, 1.25, 4), materials.purple, [0, 3.2, .2], [0, Math.PI / 4, 0]);
     } else if (entry.id === "anna") {
-      const leftPage = addMesh(group, new THREE.BoxGeometry(2.5, .24, 3.2), materials.cream, [-1.1, 1.1, 0], [0, 0, -.25]);
-      const rightPage = addMesh(group, new THREE.BoxGeometry(2.5, .24, 3.2), materials.cream, [1.1, 1.1, 0], [0, 0, .25]);
-      addMesh(group, new THREE.CylinderGeometry(.18, .18, 4.2, 8), mat.accent, [0, 1.18, 0], [Math.PI / 2, 0, 0]);
-      animated.push(leftPage, rightPage);
+      addMesh(group, new THREE.BoxGeometry(5.2, 2.65, 3.15), materials.cream, [0, 1.52, .2]);
+      addMesh(group, new THREE.BoxGeometry(5.65, .22, 3.6), materials.oxide, [0, 2.95, .2]);
+      [-1.75, -.88, 0, .88, 1.75].forEach((x) => addMesh(group, new THREE.BoxGeometry(.18, 1.7, .22), materials.oxide, [x, 1.5, -1.48]));
+      const antenna = addMesh(group, new THREE.CylinderGeometry(.07, .11, 2.8, 7), materials.dark, [1.85, 4.2, .25]);
+      const signal = addMesh(group, new THREE.TorusGeometry(.72, .06, 8, 32, Math.PI), mat.accent, [1.85, 4.55, .25], [0, 0, Math.PI / 2]);
+      animated.push(antenna, signal);
     } else if (entry.id === "toolkit") {
-      const hub = addMesh(group, new THREE.IcosahedronGeometry(1.25, 1), materials.orange, [0, 2.2, 0]);
-      for (let index = 0; index < 8; index += 1) {
-        const angle = index / 8 * Math.PI * 2;
-        const node = addMesh(group, new THREE.BoxGeometry(.58, .58, .58), index % 2 ? materials.blue : mat.accent, [Math.cos(angle) * 2.25, 2.2 + Math.sin(index) * .35, Math.sin(angle) * 2.25]);
-        animated.push(node);
-      }
+      addMesh(group, new THREE.BoxGeometry(4.8, 2.2, 3.6), materials.dark, [0, 1.35, .2]);
+      addMesh(group, new THREE.BoxGeometry(5.2, .24, 4), materials.yellow, [0, 2.58, .2]);
+      const hub = addMesh(group, new THREE.BoxGeometry(1.6, .72, 1.25), materials.orange, [0, 1.25, -1.72]);
+      for (let index = -3; index <= 3; index += 1) addMesh(hub, new THREE.BoxGeometry(.07, .55, 1.34), materials.dark, [index * .19, 0, 0]);
+      [-1.5, 1.5].forEach((x) => {
+        const sensor = addMesh(group, new THREE.IcosahedronGeometry(.48, 1), x < 0 ? materials.blue : mat.accent, [x, 3.25, 0]);
+        animated.push(sensor);
+      });
       animated.push(hub);
+    } else if (entry.id === "contact") {
+      addMesh(group, new THREE.CylinderGeometry(1.15, 1.6, 4.8, 12), materials.cream, [0, 2.55, 0]);
+      addMesh(group, new THREE.CylinderGeometry(1.45, 1.45, .72, 12), materials.oxide, [0, 5.25, 0]);
+      addMesh(group, new THREE.CylinderGeometry(.95, 1.22, .72, 12), materials.glass, [0, 5.95, 0]);
+      const beacon = addMesh(group, new THREE.ConeGeometry(.38, 16, 12, 1, true), new THREE.MeshBasicMaterial({ color: 0xffd66b, transparent: true, opacity: .2, depthWrite: false, side: THREE.DoubleSide }), [7.5, 6.1, 0], [0, 0, -Math.PI / 2], false);
+      beacon.visible = false;
+      animated.push(beacon);
     } else {
       addMesh(group, new THREE.CylinderGeometry(.18, .5, 5.1, 8), materials.dark, [0, 2.75, 0]);
       [2.15, 3.1, 4.05].forEach((y, index) => {
@@ -823,7 +1406,20 @@ async function buildWorld() {
     label.position.set(0, entry.id === "agnikul" ? 8.3 : 6.6, 0);
     group.add(label);
     world.add(group);
-    landmarkVisuals.set(entry.id, { group, ring, beam, label, animated, pad });
+    const blocker = addCameraBlocker(entry.x, entry.z, entry.id === "agnikul" ? 5.8 : 4.8, entry.id === "agnikul" ? 5.8 : 4.8, entry.id === "agnikul" ? 9.2 : 7.2);
+    landmarkVisuals.set(entry.id, { group, ring, beam, label, animated, pad, blocker });
+  });
+
+  const signalSegments = missions.map((mission, index) => {
+    const from = entryById(mission.targetId);
+    const to = index < missions.length - 1 ? entryById(missions[index + 1].targetId) : { x: 49, z: -30 };
+    const middle = new THREE.Vector3((from.x + to.x) / 2, 1.05 + index * .08, (from.z + to.z) / 2);
+    const curve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(from.x, .82, from.z), middle, new THREE.Vector3(to.x, .82, to.z)
+    ]);
+    const material = new THREE.MeshStandardMaterial({ color: index % 2 ? 0x2fa66f : 0xef6c35, emissive: index % 2 ? 0x2fa66f : 0xef6c35, emissiveIntensity: .5, transparent: true, opacity: .08 });
+    const mesh = addMesh(world, new THREE.TubeGeometry(curve, 36, .085, 7, false), material, [0, 0, 0], [0, 0, 0], false);
+    return mesh;
   });
 
   const targetMaterial = new THREE.MeshBasicMaterial({ color: 0xf45b38, transparent: true, opacity: .46, depthWrite: false });
@@ -834,18 +1430,19 @@ async function buildWorld() {
   const rover = new THREE.Group();
   const suspension = new THREE.Group();
   rover.add(suspension);
-  const chassis = addMesh(suspension, new THREE.BoxGeometry(1.65, .42, 2.5), materials.orange, [0, .68, 0]);
-  addMesh(suspension, new THREE.BoxGeometry(1.78, .18, .38), materials.dark, [0, .55, -1.35]);
-  addMesh(suspension, new THREE.BoxGeometry(1.78, .18, .32), materials.dark, [0, .55, 1.3]);
-  const cabin = addMesh(suspension, new THREE.BoxGeometry(1.2, .72, 1.15), materials.cream, [0, 1.18, .15]);
-  addMesh(suspension, new THREE.BoxGeometry(1.05, .5, .04), materials.glass, [0, 1.23, -.445], [-.12, 0, 0], false);
-  addMesh(suspension, new THREE.BoxGeometry(1.13, .14, 1.2), materials.dark, [0, 1.62, .16]);
+  const chassis = addMesh(suspension, new THREE.BoxGeometry(1.58, .46, 2.42), materials.lime, [0, .7, .06]);
+  addMesh(suspension, new THREE.BoxGeometry(1.52, .34, .72), materials.yellow, [0, .83, -1.02]);
+  addMesh(suspension, new THREE.BoxGeometry(1.72, .18, .34), materials.dark, [0, .55, 1.26]);
+  const cabin = addMesh(suspension, new THREE.BoxGeometry(1.42, 1.02, 1.35), materials.dark, [0, 1.34, .34]);
+  addMesh(suspension, new THREE.BoxGeometry(1.24, .56, .04), materials.glass, [0, 1.38, -.35], [-.12, 0, 0], false);
+  addMesh(suspension, new THREE.BoxGeometry(1.55, .16, 1.55), materials.yellow, [0, 1.94, .35]);
+  [-.68, .68].forEach((x) => addMesh(suspension, new THREE.BoxGeometry(.08, 1.12, .08), materials.yellow, [x, 1.38, .35]));
   const driver = addMesh(suspension, new THREE.SphereGeometry(.23, 12, 8), materials.dark, [0, 1.72, .18]);
   const flagPole = addMesh(suspension, new THREE.CylinderGeometry(.025, .025, 1.25, 6), materials.dark, [.68, 1.7, .7]);
-  addMesh(suspension, new THREE.BoxGeometry(.58, .32, .035), materials.lime, [.4, 2.12, .7]);
+  addMesh(suspension, new THREE.BoxGeometry(.58, .32, .035), materials.pink, [.4, 2.12, .7]);
   const wheels = [];
   const frontWheelPivots = [];
-  [[-.96, .48, -.78, true], [.96, .48, -.78, true], [-.96, .48, .82, false], [.96, .48, .82, false]].forEach(([x, y, z, front]) => {
+  [[0, .48, -1.02, true], [-.92, .48, .78, false], [.92, .48, .78, false]].forEach(([x, y, z, front]) => {
     const pivot = new THREE.Group();
     pivot.position.set(x, y, z);
     const wheel = addMesh(pivot, new THREE.CylinderGeometry(.43, .43, .3, 18), materials.tire, [0, 0, 0], [0, 0, Math.PI / 2]);
@@ -859,6 +1456,11 @@ async function buildWorld() {
     addMesh(suspension, new THREE.CircleGeometry(.12, 16), new THREE.MeshBasicMaterial({ color: 0xe94f4f }), [x, .75, 1.47], [0, Math.PI, 0], false);
   });
   const boostTrails = [-.42, .42].map((x) => addMesh(suspension, new THREE.ConeGeometry(.13, 1.2, 8), new THREE.MeshBasicMaterial({ color: 0x7bdff2, transparent: true, opacity: 0 }), [x, .62, 1.8], [Math.PI / 2, 0, 0], false));
+  const cargoCrate = new THREE.Group();
+  addMesh(cargoCrate, new THREE.BoxGeometry(.92, .66, .82), materials.orange, [0, 1.2, 1.02]);
+  addMesh(cargoCrate, new THREE.BoxGeometry(.98, .08, .88), materials.cream, [0, 1.55, 1.02]);
+  cargoCrate.visible = false;
+  suspension.add(cargoCrate);
   world.add(rover);
 
   const roverShadow = addMesh(world, new THREE.CircleGeometry(1.35, 32), new THREE.MeshBasicMaterial({ color: 0x1c342e, transparent: true, opacity: .27, depthWrite: false }), [0, .68, 0], [-Math.PI / 2, 0, 0], false);
@@ -876,6 +1478,7 @@ async function buildWorld() {
   let cameraDragging = false;
   let pointerX = 0;
   let pointerY = 0;
+  const cameraRaycaster = new THREE.Raycaster();
   canvas.addEventListener("pointerdown", (event) => {
     if (state.mode !== "exploring" || event.button !== 0) return;
     cameraDragging = true;
@@ -907,8 +1510,47 @@ async function buildWorld() {
     visual.label.material.opacity = .72;
   }
 
+  function updateMissionVisuals() {
+    const mission = activeMission();
+    const nextOrdered = mission?.items.find((item) => !state.missionCollected.has(item.id));
+    missionVisuals.forEach((visual) => {
+      const active = state.playMode === "story" && !state.storyComplete && !state.chapterQueued && visual.missionId === mission?.id && !state.missionCollected.has(visual.item.id);
+      visual.group.visible = Boolean(active && (!mission.ordered || visual.item.id === nextOrdered?.id));
+    });
+    cargoCrate.visible = state.playMode === "story" && (
+      (mission?.id === "sensor-to-trust" && state.missionCollected.has("demand")) ||
+      (mission?.id === "leave-evidence" && state.missionCollected.size > 0)
+    );
+    const profileVisual = landmarkVisuals.get("profile");
+    const showProfile = state.playMode === "free" || state.storyComplete || state.missionIndex > 0;
+    if (profileVisual) {
+      profileVisual.group.visible = showProfile;
+      profileVisual.blocker.visible = showProfile;
+    }
+    signalSegments.forEach((segment, index) => {
+      const online = index < state.completedMissions.length;
+      segment.material.opacity = online ? .82 : .08;
+      segment.material.emissiveIntensity = online ? 1.35 : .25;
+    });
+    const contactVisual = landmarkVisuals.get("contact");
+    contactVisual?.animated.forEach((object) => {
+      if (object.geometry?.type === "ConeGeometry") object.visible = state.storyComplete;
+    });
+  }
+
+  function completeMissionVisual(id) {
+    const mission = missions.find((candidate) => candidate.id === id);
+    const visual = landmarkVisuals.get(mission?.targetId);
+    if (visual) {
+      visual.ring.material.opacity = 1;
+      visual.beam.material.opacity = .08;
+      visual.group.scale.setScalar(1.04);
+    }
+    updateMissionVisuals();
+  }
+
   function updateTargetVisual() {
-    const target = entryById(state.targetId);
+    const target = currentObjective();
     if (!target) return;
     [targetBeam, targetHalo, targetOrb].forEach((object) => {
       object.position.x = target.x;
@@ -920,16 +1562,17 @@ async function buildWorld() {
     entries.forEach((entry) => {
       const visual = landmarkVisuals.get(entry.id);
       visual.ring.material.color.setHex(entry.color);
-      visual.ring.material.opacity = .9;
-      visual.beam.material.opacity = .045;
+      visual.ring.material.opacity = .46;
+      visual.beam.material.opacity = .012;
       visual.label.material.opacity = 1;
     });
-    rover.position.set(0, .64, 31);
-    rover.rotation.y = 0;
+    rover.position.set(state.player.x, .64, state.player.z);
+    rover.rotation.y = -state.player.heading;
     suspension.rotation.set(0, 0, 0);
-    cameraOrbit = 0;
-    state.cameraOrbit = 0;
+    cameraOrbit = state.playMode === "story" && state.missionIndex === 0 ? 1.05 : 0;
+    state.cameraOrbit = cameraOrbit;
     cameraHeight = 7.2;
+    updateMissionVisuals();
     updateTargetVisual();
   }
 
@@ -960,24 +1603,34 @@ async function buildWorld() {
 
       const collision = entries
         .map((entry) => ({ entry, distance: distanceTo(entry) }))
-        .filter(({ distance }) => distance < 3.15)
+        .filter(({ distance }) => distance < 2.85)
         .sort((left, right) => left.distance - right.distance)[0];
       if (collision) {
         const safeDistance = Math.max(collision.distance, .001);
         const awayX = (state.player.x - collision.entry.x) / safeDistance;
         const awayZ = (state.player.z - collision.entry.z) / safeDistance;
-        state.player.x = collision.entry.x + awayX * 3.15;
-        state.player.z = collision.entry.z + awayZ * 3.15;
+        state.player.x = collision.entry.x + awayX * 2.85;
+        state.player.z = collision.entry.z + awayZ * 2.85;
         state.player.speed *= -.2;
       }
 
-      const islandX = state.player.x;
-      const islandZ = state.player.z;
-      const radius = Math.hypot(islandX, islandZ);
-      if (radius > 47.2) {
-        state.player.x = islandX / radius * 47.2;
-        state.player.z = islandZ / radius * 47.2;
-        state.player.speed *= -.28;
+      staticColliders.forEach((collider) => {
+        const dx = state.player.x - collider.x;
+        const dz = state.player.z - collider.z;
+        if (Math.abs(dx) >= collider.halfX || Math.abs(dz) >= collider.halfZ) return;
+        const pushX = collider.halfX - Math.abs(dx);
+        const pushZ = collider.halfZ - Math.abs(dz);
+        if (pushX < pushZ) state.player.x = collider.x + Math.sign(dx || 1) * collider.halfX;
+        else state.player.z = collider.z + Math.sign(dz || 1) * collider.halfZ;
+        state.player.speed *= -.18;
+      });
+
+      const clampedX = THREE.MathUtils.clamp(state.player.x, -49, 47);
+      const clampedZ = THREE.MathUtils.clamp(state.player.z, -38, 38);
+      if (clampedX !== state.player.x || clampedZ !== state.player.z) {
+        state.player.x = clampedX;
+        state.player.z = clampedZ;
+        state.player.speed *= -.24;
       }
 
       if (state.player.airborne || state.player.verticalVelocity > 0) {
@@ -996,6 +1649,24 @@ async function buildWorld() {
           lastRampTime = state.elapsed;
           jump(7.8);
         }
+      }
+
+      if (state.playMode === "story" && !state.storyComplete) {
+        const mission = activeMission();
+        const available = mission?.ordered
+          ? [mission.items.find((item) => !state.missionCollected.has(item.id))].filter(Boolean)
+          : mission?.items.filter((item) => !state.missionCollected.has(item.id)) ?? [];
+        const collected = available.find((item) => !ACTIVATION_KINDS.has(item.kind) && pointDistance(item) < (item.kind === "ring" ? 2.45 : 2.7));
+        if (collected) collectMissionItem(collected);
+        const activatable = available
+          .filter((item) => ACTIVATION_KINDS.has(item.kind) && pointDistance(item) < 3.2)
+          .sort((left, right) => pointDistance(left) - pointDistance(right))[0] ?? null;
+        if (activatable?.id !== state.nearbyItemId) {
+          state.nearbyItemId = activatable?.id ?? null;
+          updateInterface();
+        }
+      } else if (state.nearbyItemId) {
+        state.nearbyItemId = null;
       }
 
       const nearest = entries
@@ -1056,9 +1727,13 @@ async function buildWorld() {
       const entry = entryById(id);
       const labelDistance = distanceTo(entry);
       const labelFade = THREE.MathUtils.smoothstep(labelDistance, 5.8, 11.5);
-      visual.label.visible = ["loading", "menu"].includes(state.mode) || state.targetId === id || labelDistance < 18;
+      const objective = currentObjective();
+      const objectiveLabel = objective?.id === id && ["debrief", "landmark"].includes(objective.objectiveType);
+      visual.label.visible = ["loading", "menu"].includes(state.mode) || (state.mode === "exploring" && (objectiveLabel || (labelDistance > 6 && labelDistance < 15)));
       visual.label.material.opacity = labelFade * (state.visited.has(id) ? .72 : 1);
     });
+    districtSigns.forEach((sign) => { sign.visible = ["loading", "menu"].includes(state.mode); });
+    clouds.forEach(({ cloud }) => { cloud.visible = state.mode !== "complete"; });
 
     if (!reduceMotion) {
       landmarkVisuals.forEach((visual, id) => {
@@ -1071,6 +1746,20 @@ async function buildWorld() {
       clouds.forEach(({ cloud, startX, speed }, index) => {
         cloud.position.x = startX + Math.sin(state.elapsed * speed + index) * 8;
       });
+      train.position.x = ((state.elapsed * 5.4 + 42) % 125) - 70;
+      trafficVehicles.forEach(({ auto, offset, speed }) => {
+        const ratio = (state.elapsed * speed + offset) % 1;
+        const point = trafficCurve.getPointAt(ratio);
+        const tangent = trafficCurve.getTangentAt(ratio);
+        auto.position.set(point.x, point.y, point.z);
+        auto.rotation.y = Math.atan2(tangent.x, tangent.z);
+      });
+      missionVisuals.forEach((visual, id) => {
+        if (!visual.group.visible) return;
+        visual.group.position.y = .78 + Math.sin(state.elapsed * 2.4 + id.length) * .12;
+        visual.label.visible = pointDistance(visual.item) > 5.4;
+        visual.animated.forEach((object, index) => { object.rotation.y += dt * (.45 + index * .11); });
+      });
       water.rotation.z += dt * .004;
       targetHalo.rotation.z += dt * .55;
       targetOrb.rotation.y += dt * 1.4;
@@ -1079,11 +1768,15 @@ async function buildWorld() {
       flagPole.rotation.z = Math.sin(state.elapsed * 7 + state.player.speed) * .006;
     }
 
-    if (["loading", "menu"].includes(state.mode)) {
-      const angle = state.elapsed * .045 + .58;
-      const menuCamera = new THREE.Vector3(Math.cos(angle) * 42, 27, Math.sin(angle) * 42 + 7);
+    if (state.mode === "complete") {
+      const endingCamera = new THREE.Vector3(20, 20, -4);
+      camera.position.lerp(endingCamera, 1 - Math.exp(-2.4 * dt));
+      camera.lookAt(35, 3.8, -28);
+      camera.fov += (46 - camera.fov) * (1 - Math.exp(-4 * dt));
+    } else if (["loading", "menu"].includes(state.mode)) {
+      const menuCamera = new THREE.Vector3(-2 + Math.sin(state.elapsed * .08) * 3.5, 27, 55 + Math.cos(state.elapsed * .08) * 2);
       camera.position.lerp(menuCamera, 1 - Math.exp(-1.65 * dt));
-      camera.lookAt(2, 2.8, -4);
+      camera.lookAt(-26, 3.2, 17);
       camera.fov += (47 - camera.fov) * (1 - Math.exp(-4 * dt));
     } else {
       const camHeading = state.player.heading + cameraOrbit;
@@ -1093,10 +1786,22 @@ async function buildWorld() {
         cameraHeight + state.player.y * .35,
         state.player.z + Math.cos(camHeading) * distance
       );
-      camera.position.lerp(desiredCamera, 1 - Math.exp(-4.1 * dt));
       const forwardX = Math.sin(state.player.heading);
       const forwardZ = -Math.cos(state.player.heading);
-      camera.lookAt(state.player.x + forwardX * 2.7, 1.25 + state.player.y * .55, state.player.z + forwardZ * 2.7);
+      const lookTarget = new THREE.Vector3(state.player.x + forwardX * 2.7, 1.25 + state.player.y * .55, state.player.z + forwardZ * 2.7);
+      const cameraVector = desiredCamera.clone().sub(lookTarget);
+      const desiredDistance = cameraVector.length();
+      cameraVector.normalize();
+      cameraRaycaster.set(lookTarget, cameraVector);
+      cameraRaycaster.far = desiredDistance;
+      const obstruction = cameraRaycaster.intersectObjects(cameraBlockers, false).find((hit) => hit.distance > .35);
+      if (obstruction) {
+        const safeDistance = Math.max(.85, obstruction.distance - .55);
+        desiredCamera.copy(lookTarget).addScaledVector(cameraVector, safeDistance);
+        desiredCamera.y = Math.max(desiredCamera.y, 4.8 + state.player.y * .35);
+      }
+      camera.position.lerp(desiredCamera, 1 - Math.exp(-5.2 * dt));
+      camera.lookAt(lookTarget);
       const targetFov = 48 + Math.min(Math.abs(state.player.speed) * .72, 9);
       camera.fov += (targetFov - camera.fov) * (1 - Math.exp(-4 * dt));
     }
@@ -1117,11 +1822,16 @@ async function buildWorld() {
   window.addEventListener("resize", resize, { passive: true });
   document.addEventListener("fullscreenchange", resize);
 
-  game = { update, render, resetVisuals, markVisited, updateTargetVisual, resize, jump };
+  game = { update, render, resetVisuals, markVisited, updateTargetVisual, updateMissionVisuals, completeMissionVisual, resize, jump };
   resetVisuals();
-  state.mode = pendingStart ? "exploring" : "menu";
-  state.resumeMode = state.mode;
+  state.mode = "menu";
+  state.resumeMode = "menu";
   updateInterface();
+  if (pendingStart) {
+    const requestedMode = pendingMode;
+    pendingStart = false;
+    requestedMode === "free" ? startFreeRoam() : startGame();
+  }
 
   let lastFrame = performance.now();
   function frame(now) {
@@ -1145,23 +1855,38 @@ window.advanceTime = (ms) => {
 
 window.render_game_to_text = () => {
   const nearby = entryById(state.nearbyId);
-  const target = entryById(state.targetId);
+  const target = currentObjective();
+  const mission = activeMission();
   const nearest = entries
     .map((entry) => ({ id: entry.id, title: entry.title, type: entry.type, distance: Number(distanceTo(entry).toFixed(2)), visited: state.visited.has(entry.id) }))
     .sort((left, right) => left.distance - right.distance)
     .slice(0, 5);
   return JSON.stringify({
-    coordinate_system: "World plane: +x is east/right; -z is north/forward. Distances are world units.",
+    coordinate_system: "Chennai memory map: +x is east toward the Bay of Bengal; -z is south toward the Marina finale. Bounds are x -49..47 and z -38..38.",
     mode: state.mode,
+    play_mode: state.playMode,
     player: { x: Number(state.player.x.toFixed(2)), y: Number(state.player.y.toFixed(2)), z: Number(state.player.z.toFixed(2)), heading_degrees: Number((state.player.heading * 180 / Math.PI).toFixed(1)), speed: Number(state.player.speed.toFixed(2)), airborne: state.player.airborne, boosting: controls.boost && controls.up },
     camera: { orbit_degrees: Number((state.cameraOrbit * 180 / Math.PI).toFixed(1)) },
     zone: state.zone,
     nearby: nearby ? { id: nearby.id, title: nearby.title, distance: Number(distanceTo(nearby).toFixed(2)), action: "Press Enter to inspect" } : null,
-    target: target ? { id: target.id, title: target.title, distance: Number(distanceTo(target).toFixed(2)) } : null,
+    target: target ? { id: target.id, title: target.title, objective_type: target.objectiveType, x: target.x, z: target.z, distance: Number(pointDistance(target).toFixed(2)) } : null,
+    mission: state.playMode === "story" && mission ? {
+      id: mission.id,
+      chapter: state.missionIndex + 1,
+      chapters_total: missions.length,
+      title: mission.title,
+      location: mission.location,
+      collected: [...state.missionCollected],
+      required: mission.items.map((item) => item.id),
+      ready_for_debrief: missionReady(),
+      completed_missions: [...state.completedMissions],
+      story_complete: state.storyComplete
+    } : null,
+    inventory: [...state.inventory],
     selected: state.selectedId,
     visited_count: state.visited.size,
     visited_ids: [...state.visited],
     nearest_landmarks: nearest,
-    controls: "WASD/arrows drive; Shift boosts; Space jumps; Enter inspects; drag rotates camera; M opens map; R respawns; F fullscreen; Escape closes panels."
+    controls: "WASD/arrows drive; Shift boosts; Space jumps; Enter debriefs/inspects; drag rotates camera; M opens map; R respawns at the current chapter; F fullscreen; Escape closes panels."
   });
 };

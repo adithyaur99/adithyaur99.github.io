@@ -3,22 +3,22 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#f2b35f">
-    <meta name="description" content="Drive through Adithya U R's interactive 3D portfolio of ML systems, data platforms, GPU infrastructure, and engineering experience.">
+    <meta name="theme-color" content="#ef6c35">
+    <meta name="description" content="Drive a Chennai-rooted 3D career adventure through MIT Chromepet, rockets, autonomous data, GPUs, and open-source ML systems.">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Adithya U R — A portfolio you can drive">
-    <meta property="og:description" content="Explore ML systems, projects, and experience as one playable 3D world.">
+    <meta property="og:title" content="Adithya U R — From Chennai to the Stack">
+    <meta property="og:description" content="A playable career story through MIT Chromepet, rockets, data platforms, GPUs, and open-source ML systems.">
     <meta property="og:url" content="https://adithyaur99.github.io/">
-    <meta property="og:image" content="https://adithyaur99.github.io/assets/img/og-systems-island.png">
+    <meta property="og:image" content="https://adithyaur99.github.io/assets/img/og-chennai-signal-run.png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Adithya U R — Drive through the stack">
-    <meta name="twitter:description" content="Explore ML systems, projects, and experience as one playable 3D world.">
-    <meta name="twitter:image" content="https://adithyaur99.github.io/assets/img/og-systems-island.png">
-    <title>Adithya U R — A Portfolio You Can Drive</title>
+    <meta name="twitter:title" content="Adithya U R — From Chennai to the Stack">
+    <meta name="twitter:description" content="Drive the six-chapter story from MIT Chromepet to production ML systems.">
+    <meta name="twitter:image" content="https://adithyaur99.github.io/assets/img/og-chennai-signal-run.png">
+    <title>Adithya U R — From Chennai to the Stack</title>
     <link rel="icon" href="assets/img/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&amp;family=Manrope:wght@400;500;600;700;800&amp;family=Noto+Sans+Tamil:wght@500;700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
   </head>
   <body>
@@ -26,11 +26,11 @@
     <div class="noise" aria-hidden="true"></div>
 
     <main class="world-shell" id="top">
-      <canvas id="world" tabindex="0" aria-label="A driveable 3D portfolio world. Use WASD or arrow keys to steer. Approach a landmark and press Enter to read it."></canvas>
+      <canvas id="world" tabindex="0" aria-label="A driveable Chennai-themed 3D career game. Use WASD or arrow keys to steer, collect mission technology, and press Enter at the chapter landmark."></canvas>
 
       <header class="site-header">
         <a class="mark" href="#top" aria-label="Adithya U R, home"><span>A</span><i></i><span>UR</span></a>
-        <div class="header-status"><span class="status-dot"></span> Systems Island / Stockholm</div>
+        <div class="header-status"><span class="status-dot"></span> Chennai memory map / 13.0827° N</div>
         <nav class="header-links" aria-label="External links">
           <a href="https://github.com/adithyaur99" target="_blank" rel="noreferrer">GitHub ↗</a>
           <a href="https://www.linkedin.com/in/adithya-u-r-79586612b/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
@@ -38,13 +38,16 @@
       </header>
 
       <section class="start-screen" id="start-screen" aria-labelledby="hero-title">
-        <p class="eyebrow"><span>NEW WORLD</span> Adithya U R · ML systems engineer</p>
-        <h1 id="hero-title">Drive through<br>the <em>stack.</em></h1>
-        <p>This is my résumé rebuilt as a small open world. Follow the roads, launch off ramps, find every project, and press Enter when something catches your eye.</p>
+        <p class="eyebrow"><span>CHENNAI · 2016</span> Adithya U R · origin story</p>
+        <h1 id="hero-title">From Chennai<br>to the <em>stack.</em></h1>
+        <p>The engine starts at MIT Chromepet. Build the first sensor rig, trace rockets and radio signals, move autonomous data, and bring a GPU systems harbor online.</p>
         <div class="start-actions">
-          <button class="button button-primary" id="start-game" type="button">Start the engine <span>→</span></button>
-          <button class="button button-quiet" id="open-intro" type="button">Read the quick intro <span>↗</span></button>
+          <button class="button button-primary" id="start-game" type="button">Begin the journey <span>→</span></button>
+          <button class="button button-quiet" id="free-roam" type="button">Browse freely <span>↗</span></button>
+          <a class="story-read-link" href="#accessible-portfolio">Read the portfolio</a>
+          <button class="story-read-link" id="new-story" type="button" hidden>Start over</button>
         </div>
+        <div class="story-stats" role="group" aria-label="Game scope"><strong>06</strong><span>career chapters</span><strong>15</strong><span>story landmarks</span><strong>01</strong><span>Chennai-built path</span></div>
         <div class="start-controls">
           <span><kbd>WASD</kbd> Drive</span>
           <span><kbd>SHIFT</kbd> Boost</span>
@@ -56,19 +59,28 @@
 
       <section class="game-hud" id="game-hud" hidden aria-label="Exploration status">
         <div class="hud-mission">
-          <span>NOW EXPLORING</span>
-          <strong id="current-zone">Arrival plaza</strong>
+          <span id="chapter-label">CHAPTER 01 / 06</span>
+          <strong id="current-zone">MIT Chromepet</strong>
         </div>
         <div class="hud-navigation">
           <span class="nav-arrow" id="nav-arrow">↑</span>
-          <div><small>NEXT LANDMARK</small><strong id="target-title">About Adithya</strong><em id="target-distance">0 m</em></div>
+          <div><small id="objective-label">MISSION TARGET</small><strong id="target-title">MIT Electronics Yard</strong><em id="target-distance">0 m</em></div>
         </div>
-        <div class="hud-progress"><strong id="visited-count">0 / 15</strong><span>DISCOVERED</span><small id="speed-readout">0 KM/H</small></div>
+        <div class="hud-progress"><strong id="visited-count">0 / 3</strong><span>MISSION PARTS</span><small><b id="story-count">0 / 15</b> stories · <i id="speed-readout">0 KM/H</i></small></div>
       </section>
+
+      <section class="chapter-card" id="chapter-card" hidden aria-live="polite">
+        <span id="chapter-number">CHAPTER 01 · IGNITION</span>
+        <h2 id="chapter-title">Build the first machine.</h2>
+        <p id="chapter-copy">Collect the sensor, signal, and compute modules around MIT. Return to the electronics yard when the rig is complete.</p>
+        <div class="chapter-progress" id="chapter-progress"></div>
+      </section>
+
+      <div class="pickup-toast" id="pickup-toast" hidden aria-live="assertive"><span>TECH ACQUIRED</span><strong id="pickup-title">NVIDIA Jetson</strong></div>
 
       <div class="interaction-prompt" id="interaction-prompt" hidden aria-live="polite">
         <kbd>ENTER</kbd>
-        <span>Read <strong id="interaction-title">About Adithya</strong></span>
+        <span>Enter <strong id="interaction-title">chapter landmark</strong></span>
       </div>
 
       <aside class="detail-panel" id="detail-panel" role="dialog" aria-modal="true" tabindex="-1" hidden aria-labelledby="detail-title">
@@ -90,13 +102,13 @@
 
       <aside class="map-panel" id="map-panel" role="dialog" aria-modal="true" tabindex="-1" hidden aria-labelledby="map-title">
         <div class="panel-topline"><span>WORLD MAP</span><span>M OR ESC TO CLOSE</span></div>
-        <div class="map-heading"><h2 id="map-title">Pick a stop.<br><em>Drive there.</em></h2><p>Every pin is real experience or a runnable open-source project. Set a route and follow the arrow—no teleporting.</p></div>
+        <div class="map-heading"><h2 id="map-title">Chennai,<br><em>recompiled.</em></h2><p>A memory map, not a scale model: Chromepet is the origin; each road turns a real education, career, or open-source systems chapter into a place you can drive.</p></div>
         <div class="map-grid" id="map-grid"></div>
         <button class="panel-close" id="close-map" type="button" aria-label="Close world map">×</button>
       </aside>
 
       <div class="game-toolbar" id="game-toolbar" hidden>
-        <button id="map-button" type="button">M · MAP</button>
+        <button id="map-button" type="button">M · CHENNAI MAP</button>
         <button id="restart-button" type="button">R · RESPAWN</button>
         <button id="fullscreen-button" type="button">F · FULLSCREEN</button>
       </div>
@@ -107,21 +119,34 @@
         <button type="button" data-control="right" aria-label="Turn right">→</button>
         <button class="touch-boost" type="button" data-control="boost" aria-label="Boost">BOOST</button>
         <button class="touch-jump" type="button" data-action="jump" aria-label="Jump">HOP</button>
+        <button class="touch-map" type="button" data-action="map" aria-label="Open Chennai map">MAP</button>
       </div>
       <button class="touch-inspect" id="touch-inspect" type="button" hidden>Read</button>
 
       <div class="world-legend" id="world-legend" hidden aria-hidden="true">
-        <span><i class="legend-experience"></i>Experience</span>
-        <span><i class="legend-project"></i>Projects</span>
-        <span><i class="legend-education"></i>Education</span>
+        <span><i class="legend-experience"></i>Career</span>
+        <span><i class="legend-project"></i>Technology</span>
+        <span><i class="legend-education"></i>Roots</span>
       </div>
       <div class="game-status" id="game-status" aria-live="polite">World loading</div>
+
+      <section class="ending-screen" id="ending-screen" hidden aria-labelledby="ending-title">
+        <p>ALL SIX SYSTEMS ONLINE · CHENNAI → STOCKHOLM</p>
+        <h2 id="ending-title">Roots became<br><em>runtime.</em></h2>
+        <div class="ending-signal"><span>MIT</span><i></i><span>ROCKETS</span><i></i><span>ML</span><i></i><span>DATA</span><i></i><span>GPU</span></div>
+        <p class="ending-copy">The journey started with electronics and a Jetson. It now spans governed sensor data, distributed compute, workload identity, and reproducible ML systems.</p>
+        <div class="start-actions">
+          <button class="button button-primary" id="continue-game" type="button">Keep exploring <span>→</span></button>
+          <button class="button button-quiet" id="replay-story" type="button">Replay the story <span>↻</span></button>
+          <a class="button button-quiet" href="https://github.com/adithyaur99" target="_blank" rel="noreferrer">Open the code <span>↗</span></a>
+        </div>
+      </section>
     </main>
 
     <section class="accessible-portfolio" id="accessible-portfolio" aria-label="Text portfolio">
       <a class="accessible-close" href="#top">← Back to the 3D world</a>
-      <h2>Adithya U R — ML Systems Engineer</h2>
-      <p>I design reliable paths from raw data to governed compute, evaluation, and evidence.</p>
+      <h2>Adithya U R — From Chennai to ML Systems</h2>
+      <p>My engineering path began with Electronics and Communication at Madras Institute of Technology, Anna University, Chromepet, and grew into reliable paths from raw data to governed compute, evaluation, and evidence.</p>
       <h3>Experience</h3>
       <p>Data Engineer, Scania, 2023–present. Automation Specialist, Scania, 2022–2023. ML Engineering Intern, Ericsson, 2021. Software Engineer, Agnikul Cosmos, 2020.</p>
       <h3>Selected open-source projects</h3>
@@ -134,7 +159,7 @@
         <li><a href="https://github.com/adithyaur99/mlops-experiments">All MLOps Experiments</a></li>
       </ul>
       <h3>Education</h3>
-      <p>MSc Autonomous Systems, KTH. BE Electronics and Communication Engineering, Anna University.</p>
+      <p>MSc Autonomous Systems, KTH. BE Electronics and Communication Engineering, Madras Institute of Technology, Anna University, Chennai.</p>
       <p><a href="mailto:adithyaur1999@gmail.com">Email Adithya</a> · <a href="https://github.com/adithyaur99">GitHub</a> · <a href="https://www.linkedin.com/in/adithya-u-r-79586612b/">LinkedIn</a></p>
     </section>
 
