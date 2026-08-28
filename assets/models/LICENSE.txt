@@ -1,0 +1,11 @@
+Toy Car model
+
+Source: KhronosGroup/glTF-Sample-Assets, Models/ToyCar
+https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/ToyCar
+
+Copyright 2020, Public.
+Guido Odendahl — initial car model.
+Eric Chadwick — extensions and scene composition.
+
+License: CC0 1.0 Universal.
+https://creativecommons.org/publicdomain/zero/1.0/

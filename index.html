@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#ef6c35">
+    <meta name="theme-color" content="#f09a36">
     <meta name="description" content="Drive a Chennai-rooted 3D career adventure through MIT Chromepet, rockets, autonomous data, GPUs, and open-source ML systems.">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Adithya U R — From Chennai to the Stack">
@@ -20,6 +20,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&amp;family=Manrope:wght@400;500;600;700;800&amp;family=Noto+Sans+Tamil:wght@500;700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <script type="importmap">
+      {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#accessible-portfolio">Skip the game</a>
@@ -38,12 +41,12 @@
       </header>
 
       <section class="start-screen" id="start-screen" aria-labelledby="hero-title">
-        <p class="eyebrow"><span>CHENNAI · 2016</span> Adithya U R · origin story</p>
-        <h1 id="hero-title">From Chennai<br>to the <em>stack.</em></h1>
-        <p>The engine starts at MIT Chromepet. Build the first sensor rig, trace rockets and radio signals, move autonomous data, and bring a GPU systems harbor online.</p>
+        <p class="eyebrow"><span>CHENNAI · GOLDEN HOUR</span> A playable systems career</p>
+        <h1 id="hero-title">Drive the city.<br>Build the <em>stack.</em></h1>
+        <p>Take the Chennai taxi from MIT Chromepet to Marina. Six contracts turn sensors, rockets, semantic search, autonomous data, identity, DVC, Spark, Flyte, SkyPilot, and Modal into one driveable career.</p>
         <div class="start-actions">
-          <button class="button button-primary" id="start-game" type="button">Begin the journey <span>→</span></button>
-          <button class="button button-quiet" id="free-roam" type="button">Browse freely <span>↗</span></button>
+          <button class="button button-primary" id="start-game" type="button">Start the engine <span>→</span></button>
+          <button class="button button-quiet" id="free-roam" type="button">Free drive <span>↗</span></button>
           <a class="story-read-link" href="#accessible-portfolio">Read the portfolio</a>
           <button class="story-read-link" id="new-story" type="button" hidden>Start over</button>
         </div>
@@ -68,6 +71,13 @@
         </div>
         <div class="hud-progress"><strong id="visited-count">0 / 3</strong><span>MISSION PARTS</span><small><b id="story-count">0 / 15</b> stories · <i id="speed-readout">0 KM/H</i></small></div>
       </section>
+
+      <aside class="vehicle-hud" id="vehicle-hud" hidden aria-label="Taxi telemetry">
+        <span>CHENNAI TAXI · 01</span>
+        <strong><b id="vehicle-speed">0</b><small>km/h</small></strong>
+        <div class="vehicle-meter"><i id="boost-meter"></i><span>BOOST</span></div>
+        <div class="vehicle-condition"><span>CONDITION</span><b id="condition-readout">100%</b></div>
+      </aside>
 
       <section class="chapter-card" id="chapter-card" hidden aria-live="polite">
         <span id="chapter-number">CHAPTER 01 · IGNITION</span>
