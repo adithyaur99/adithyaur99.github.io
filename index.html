@@ -16,6 +16,7 @@
     <meta name="twitter:image" content="https://adithyaur99.github.io/assets/img/og-chennai-signal-run.png">
     <title>Adithya U R — From Chennai to the Stack</title>
     <link rel="icon" href="assets/img/favicon.ico">
+    <link rel="preload" href="assets/img/chennai-sunset-world.jpg" as="image" fetchpriority="high">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&amp;family=Manrope:wght@400;500;600;700;800&amp;family=Noto+Sans+Tamil:wght@500;700&amp;display=swap" rel="stylesheet">
@@ -60,6 +61,14 @@
         </div>
       </section>
 
+      <section class="world-loader" id="world-loader" hidden aria-live="polite" aria-labelledby="world-loader-title">
+        <p>CHENNAI SIGNAL / PREPARING THE DRIVE</p>
+        <h2 id="world-loader-title">Opening the boulevard.</h2>
+        <div class="loader-track" aria-hidden="true"><i></i></div>
+        <span>Building the playable city on this device</span>
+        <a href="#accessible-portfolio">Read the portfolio meanwhile →</a>
+      </section>
+
       <section class="game-hud" id="game-hud" hidden aria-label="Exploration status">
         <div class="hud-mission">
           <span id="chapter-label">CHAPTER 01 / 06</span>
@@ -77,6 +86,16 @@
         <strong><b id="vehicle-speed">0</b><small>km/h</small></strong>
         <div class="vehicle-meter"><i id="boost-meter"></i><span>BOOST</span></div>
         <div class="vehicle-condition"><span>CONDITION</span><b id="condition-readout">100%</b></div>
+      </aside>
+
+      <aside class="mini-map" id="mini-map" hidden aria-label="Live route overview">
+        <div class="mini-map-field" id="mini-map-field" aria-hidden="true">
+          <i class="mini-road mini-road-a"></i><i class="mini-road mini-road-b"></i><i class="mini-road mini-road-c"></i>
+          <i class="mini-route" id="mini-route"></i>
+          <span class="mini-target" id="mini-target"></span>
+          <span class="mini-player" id="mini-player"></span>
+        </div>
+        <small id="mini-map-label">CHROMEPET STATION</small>
       </aside>
 
       <section class="chapter-card" id="chapter-card" hidden aria-live="polite">
